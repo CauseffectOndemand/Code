@@ -23,10 +23,12 @@
         </div>
         <div class="upload-items">
           <div class="upload-item">
-            <div>Upload CV</div>
+            <label for="CV" >Upload CV</label>
+            <input id="CV" v-on:change="upload_file('user_cv')" style="display: none" type="file">
           </div>
           <div class="upload-item portfolio">
-            <div>Upload portfolio</div>
+            <label for="UP" >Upload portfolio</label>
+            <input id="UP" v-on:change="upload_file('user_portfolio')" style="display: none"  type="file">
           </div>
         </div>
         <div class="checkbox-item">
@@ -56,6 +58,7 @@
     data(){
       return {
           mysrc1:require(`../../assets/icons/close.png`),
+          formData: new FormData(),
           contactName: '',
           contactEmail: '',
           contactPhone: '',
@@ -79,6 +82,9 @@
       // closeForm() {
       //   this.$emit('closed-form');
       // },
+      upload_file(name){
+        this.formData.append(name, event.target.files[0])
+      },
       activContactForm(){
         const patternEmail =/.+@.+\..+/i;
         const patternPhone = /^\d+$/;
@@ -87,16 +93,15 @@
           contactEmail: value => patternEmail.test(value),
           contactPhone: value => patternPhone.test(value) && value.length > 5,
           contactWeb: value => value.length > 4,
-        }
+        };
         let messages = {
           contactName: 'enter your name (3+)',
           contactEmail: 'error Email',
           contactPhone: 'must be only number(5+)',
           contactWeb: 'enter your web site(4+)',
-        }
+        };
         Object.keys(patterns).forEach(fieldName => {
           const pattern = patterns[fieldName];
-          console.log('------------',pattern)
           const value = this[fieldName]
           if(!pattern(value)) {
             this.validMess[fieldName] = messages[fieldName];
@@ -105,14 +110,20 @@
             this.valid[fieldName] = true;
             this.validMess[fieldName] = '';
           }
-        })
+        });
         if (Object.keys(this.valid).length === 4) {
+          this.formData.append('name_and_surname', this.contactName);
+          this.formData.append('register_as_specialist', 1);
+          this.formData.append('email', this.contactEmail);
+          this.formData.append('phone_number', this.contactPhone);
+          this.formData.append('web_site', this.contactWeb);
+          this.$store.dispatch('specialistPopUp/specialistFormSend', this.formData);
+          this.formData = new FormData();
           this.contactName = '';
           this.contactEmail = '';
           this.contactPhone = '';
           this.contactWeb ='';
           this.checked = false;
-          console.log('--------SUBMIT--------');
         }
       }
     }

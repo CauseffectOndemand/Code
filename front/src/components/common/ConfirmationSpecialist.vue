@@ -51,7 +51,6 @@
           <span class="checkmark"></span>
         </label>
       </div>
-
       <div class="btnCustom">
         <Button btnText="BEVESTIG"
                 btnClass="btnOrangeNav"
@@ -136,15 +135,16 @@
           }
         });
         if (Object.keys(this.valid).length === 7) {
-          this.$store.dispatch('specialistPopUp/specialistFormSend', {
-            name: this.contactName,
-            contact_person: this.companyName,
-            email: this.contactEmail,
-            phone: this.contactPhone,
-            address: this.contactAddress,
-            postal_location: this.contactPostcode,
-            kvk: this.contactKvkAddress,
-          });
+          const data = new FormData();
+          data.append('profile_form', 1);
+          data.append('company_name', this.contactName);
+          data.append('contact', this.companyName);
+          data.append('email', this.contactEmail);
+          data.append('phone_number', this.contactPhone);
+          data.append('address_and_house_number', this.contactAddress);
+          data.append('city_and_postcode', this.contactPostcode);
+          data.append('kvk_number', this.contactKvkAddress);
+          this.$store.dispatch('specialistPopUp/specialistFormSend', data);
           this.$store.dispatch('specialistPopUp/partPopUpAct', 3);
           this.contactName = '';
           this.contactEmail = '';

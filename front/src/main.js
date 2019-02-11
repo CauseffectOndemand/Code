@@ -31,3 +31,4 @@ new Vue({
     store
 });
 
+Vue.use(Vuex);Vue.use(VueRouter);

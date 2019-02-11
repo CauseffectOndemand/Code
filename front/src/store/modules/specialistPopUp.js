@@ -1,7 +1,7 @@
 // initial state
 
 
-import axios from "axios";
+import axios from "../../axios.config";
 
 const state = {
   clickedPopUp: false,
@@ -43,9 +43,11 @@ const actions = {
     let  headers = {
       'Content-Type': 'application/x-www-form-urlencode',
     };
+    console.log(data);
     axios
-      .post('https://app.causeffect.nl/public/api/employer_create.php', data, headers)
+      .post('/public/api/send_email.php', data, headers)
       .then(function (response) {
+        console.log(response);
         if (response.data == 'ok') {
           commit('formSendMut', true);
         }

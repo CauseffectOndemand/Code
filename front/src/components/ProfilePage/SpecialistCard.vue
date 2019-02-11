@@ -14,7 +14,7 @@
                                 <span>{{ selectedSpecialist.user_place_to_work }}</span>
                             </div>
                             <div class="name-last">
-                                <p><span>€ {{selectedSpecialist.user_hourly_rate}} ,- </span> per uur</p>
+                                <p><span>€ {{selectedSpecialist.wage}} ,- </span> per uur</p>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                 <hr>
 
                 <div class="skills" >
-                    <h2 class="mobile_left_text">Vaardigheden</h2>
+                    <h2 class="mobile_left_text">Skills</h2>
                     <div class="skills-items">
                         <div class="skills-item" v-for="skill in selectedSpecialist.skills"
                              v-if="skill.name!== ''"
@@ -69,30 +69,52 @@
                     </div>
                     <hr>
 
-                    <h2 class="mobile_left_text">Availability</h2>
-                    <AvailabilityDays
-                      :isLargeSize="true"
-                      :days="selectedSpecialist.weekday_availability">
-                    </AvailabilityDays>
+                    <!--<h2 class="mobile_left_text">Availability</h2>-->
+                    <!--<AvailabilityDays-->
+                      <!--:isLargeSize="true"-->
+                      <!--:days="selectedSpecialist.weekday_availability">-->
+                    <!--</AvailabilityDays>-->
+
+                    <h2 class="mobile_left_text">Over mij</h2>
+                    <div class="about_me">
+                        {{selectedSpecialist.about_me}}
+                    </div>
                 </div>
 
             </div>
 
-            <div class="right-part">
-                <h2 class="mobile_left_text">Diploma’s</h2>
-                <div class="mbo-items">
-                    <div class="mbo-item"
-                         v-for="diplom in selectedSpecialist.user_education_certificats"
-                         v-if="diplom.type === 'diploma'"
-                         v-bind:key="diplom + Math.random()">
-                        <a target="_blank"
-                           :href="getBaseURL() + diplom.file_name">
-                            {{diplom.title || 'default name'}}
-                        </a>
+            <div class="right-part" >
+                <div class="rij_title" >
+                    <div class="rij_left">In bezit van auto</div>
+                    <div class="rij_right">
+                        {{selectedSpecialist.drivers_license === "1" ? "Ja" : "Nee"}}
                     </div>
                 </div>
-                <hr>
-
+                <div class="rij_content">
+                    <div class="rij_block">
+                        <div class="rij_left">Leeftijd:</div>
+                        <div class="rij_right">{{selectedSpecialist.age}}</div>
+                    </div>
+                    <div class="rij_block">
+                        <div class="rij_left">Woonplaats:</div>
+                        <div class="rij_right">{{selectedSpecialist.location}}</div>
+                    </div>
+                    <div class="rij_block">
+                        <div class="rij_left">Jaren ervaring:</div>
+                        <div class="rij_right">{{selectedSpecialist.years_experience}}</div>
+                    </div>
+                    <div class="rij_block">
+                        <div class="rij_left">Relevante cursus/training:</div>
+                        <div class="rij_right">{{selectedSpecialist.relevant_training}}</div>
+                    </div>
+                    <div class="rij_block">
+                        <div class="rij_left">Taal:</div>
+                        <div class="rij_right">
+                            <div v-for="lang in selectedSpecialist.user_languages">{{lang}}</div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr-down">
                 <h2 class="mobile_left_text">Interne opleidingen</h2>
                 <div class="mbo-items">
                     <div class="mbo-item"
@@ -107,7 +129,18 @@
                 </div>
 
                 <hr class="hr-down">
-                <p class="rjb"><span>Rijbewijs</span> Ja</p>
+                <h2 class="mobile_left_text">Opleidingen</h2>
+                <div class="mbo-items">
+                    <div class="mbo-item"
+                         v-for="diplom in selectedSpecialist.user_education_certificats"
+                         v-if="diplom.type === 'diploma'"
+                         v-bind:key="diplom + Math.random()">
+                        <a target="_blank"
+                           :href="getBaseURL() + diplom.file_name">
+                            {{diplom.title || 'default name'}}
+                        </a>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -171,7 +204,29 @@
     .point-items {
         display: flex;
     }
-
+    .rij_title{
+        display: flex;
+        width: 500px;
+        justify-content: space-between;
+        font-family: GolanoRegular;
+        font-size: 25px;
+        font-weight: 400;
+        line-height: 35px;
+        color: #646464
+    }
+    .rij_left{
+        width:250px;font-family: GolanoSemi;
+    }
+    .rij_right{
+         width:250px
+    }
+     .rij_content{
+         padding-top: 2%;font-family: GolanoRegular;font-size: 25px;font-weight: 400;
+         line-height: 35px;color: #646464
+     }
+     .rij_block{
+         display: flex; width: 500px; justify-content: space-between
+     }
     .wrapp {
         padding-left: 9%;
         display: flex;
@@ -187,6 +242,12 @@
         display: flex;
         flex-direction: column;
         padding-bottom: 2%;
+    }
+    .about_me{
+        width: 100%;
+        word-break: break-word;
+        padding-right: 20px;
+        font-family: GolanoRegular;
     }
 
     .right-part {
@@ -229,7 +290,7 @@
     .name-first {
         display: flex;
         align-items: flex-start;
-        width: 58%;
+        width: 68%;
         margin-top: 10%;
         p {
             font-family: GolanoSemi;
@@ -445,6 +506,17 @@
         .name-last p {
             margin-left: 7%;
         }
+        .rij_left,.rij_right{
+            width:50%;
+        }
+
+        .rij_content, .rij_title{
+         font-size: 20px;
+        }
+        .rij_title, .rij_block{
+            width: 100%;
+        }
+
     }
 
     @media screen and (max-width: 1520px) {
@@ -456,6 +528,7 @@
         }
         .btnCustom button {
             width: 80%;
+            font-size: 1.1rem;
         }
     }
 
@@ -471,19 +544,23 @@
                 width: 80%;
             }
         }
+        .rij_content, .rij_title{
+            font-size: 17px;
+        }
         .name-last p {
             font-size: 1.4rem;
         }
         .name-first{
             width: 70%;
+            align-items: baseline;
         }
         .name-first p {
-            font-size: 1.7rem;
-            width: 27%;
+            font-size: 1.6rem;
+            width: 46%;
         }
         .name-first span {
-            font-size: 1.1rem;
-            width: 50%;
+            font-size: 1.0rem;
+            width: 48%;
         }
         .availability-first p {
             margin-right: 1%;
@@ -504,13 +581,26 @@
         .up * {
             font-size: 1.5rem;
         }
+        .about_me{
+            padding: 0;
+        }
         .name-first p {
             width: 100%;
+            text-align: left;
         }
         .point {
             width: 45px;
             height: 45px;
         }
+
+        .rij_title, .rij_block{
+            width: 500px;
+            font-size: 25px;
+        }
+        .rij_left, .rij_right{
+            width:250px;font-size: 25px;
+        }
+
         .wrapp {
             flex-direction: column;
         }
@@ -548,7 +638,7 @@
             width: 100%;
         }
         .btnCustom {
-            display: none;
+            /*display: none;*/
         }
         .up-right hr {
             width: 96%;
@@ -571,7 +661,8 @@
     }
     @media screen and (max-width: 820px) {
         .name-first{
-            width: 67%;
+            width: 69%;
+            font-size: 1.2rem;
         }
     }
 
@@ -597,6 +688,10 @@
             hr {
                 width: 100%;
             }
+        }
+        .btnCustom{
+            display: flex;
+            justify-content: center;
         }
         .wrap-item {
             width: 100%;
@@ -673,6 +768,20 @@
         }
     }
 
+    @media screen and (max-width: 550px) {
+        .rij_left,.rij_right{
+            width:50%;
+        }
+        .rij_block, .rij_title{
+            width:100%;
+        }
+        h2, .rij_title{
+            font-size:15px!important;
+        }
+        .rij_left, .rij_right, .rij_block, .about_me,.rij_content{
+            font-size:13px!important;
+        }
+    }
     @media screen and (max-width: 450px) {
         .availability-last {
           margin-top: 0 !important;
@@ -715,6 +824,7 @@
         .availability-last {
           margin-top: 0 !important;
         }
+
         .wrapp {
             padding-left: 9%;
             display: -webkit-box;

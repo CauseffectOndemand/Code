@@ -65,7 +65,8 @@
     methods: {
       getBaseURL: () => base_url,
       order(){
-        this.$router.push({path: `/orderSpecialist/${this.specialistId}`});
+        // this.$router.push({path: `/orderSpecialist/${this.specialistId}`});
+        window.location.href = `${window.location.origin}/orderSpecialist/${this.specialistId}`
       },
       onOpenPopUp() {
         this.$store.dispatch('specialistPopUp/statePopUpAct', true);

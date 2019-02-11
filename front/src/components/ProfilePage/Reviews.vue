@@ -87,13 +87,16 @@
             },
         },
         mounted: function () {
-          this.$store.dispatch('specialistList/getReviewsWithServer', this.$route.params.id);
+            this.$store.dispatch('specialistList/getReviewsWithServer', this.$route.params.id);
         },
         computed: {
             ...mapGetters({
                  reviews: 'specialistList/getReviewsWithStore'
             }),
         },
+        beforeDestroy(){
+            // this.$store.dispatch('specialistList/getReviewsWithServerDestroy', this.$route.params.id);
+        }
     }
 </script>
 
