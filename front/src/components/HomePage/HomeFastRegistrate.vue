@@ -30,7 +30,7 @@
                     Wij hebben het
                     antwoord.</h2>
                 <hr>
-                <p>020 26 11 813</p>
+                <p>085 130 3493</p>
                 <p class="base-email">{{base_email}}</p>
                 <ul>
 
@@ -44,11 +44,12 @@
     </b-container>
 </template>
 <script>
-  import { base_email } from '../../axios.config';
+    import  {base_email} from "../../axios.config";
+    import  axios from "../../axios.config";
   export default {
     data() {
       return {
-        base_email: base_email,
+          base_email: base_email,
         regName: '',
         regEmail:'',
         validRegForm: {
@@ -74,8 +75,13 @@
           }
 
           if (valid) {
-            this.regName = '';
-            this.regEmail = '';
+              let data = new FormData();
+              data.append('footer_form', 1);
+              data.append('user_email', this.regEmail);
+              data.append('user_name', this.regName);
+              axios.post('/public/api/send_email.php', data)
+                  .then(response => console.log(response))
+                  .then(err => console.log(err));
           }
         },
         onScroll() {

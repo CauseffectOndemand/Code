@@ -16,7 +16,7 @@
               <vue-single-select
                 v-model="filters.role"
                 placeholder="Specialismen"
-                :options="rolesList"
+                :options="rolesList == 'DTP’er' ? 'Fotograaf' : rolesList"
                 :required="true"
                 class="input-cast"
               ></vue-single-select>
@@ -44,12 +44,12 @@
 
           <div class="filter-item">
               <vue-single-select
-                :class="{disabled: !citiesList.length }"
-                v-model="filters.user_city"
-                placeholder="Locatie last"
-                :options="citiesList"
-                :required="true"
-                class="input-cast"
+                      :class="{disabled: !citiesList.length }"
+                      v-model="filters.user_city"
+                      placeholder="Locatie last"
+                      :options="citiesList"
+                      :required="true"
+                      class="input-cast"
               ></vue-single-select>
           </div>
       </div>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapMutations} from 'vuex';
     import axios from "../../axios.config";
     import VueSingleSelect from "vue-single-select";
     import Anketa from '../Anketa';
@@ -114,6 +114,7 @@
                     },
                 ],
             }
+
         },
         created(){
             this.filters.role = this.$router.history.current.query.role;
@@ -122,7 +123,7 @@
             }});
         },
         mounted: function () {
-          this.$store.dispatch('other_request/get_data_with_server')
+          this.$store.dispatch('other_request/get_data_with_server');
         },
         methods: {
             onClickPrice: function (index) {
@@ -130,7 +131,7 @@
             },
             applyFilter: function (arr, key, value) {
                 return value ? arr.filter(item => item[key] === value) : arr;
-            }
+            },
         },
         computed: {
             ...mapGetters({
@@ -140,8 +141,16 @@
                 regions:        'other_request/getRegionsWithStore',
                 regionsList:    'other_request/getRegionsListWithStore',
                 cities:         'other_request/getCitiesWithStore',
-                citiesList:     'other_request/getCitiesListListWithStore',
+                // citiesList:     'other_request/getCitiesListListWithStore',
             }),
+            citiesList:{
+                get() {
+                  return this.$store.state.other_request.citiesList
+                },
+                set(value){
+                    this.$store.commit('other_request/cityDataMut', {data:[]})
+                },
+            },
             filteredSpecialistList() {
                 this.$router.push({ path: 'huurEenSpecialist', query: {
                   ...this.filters

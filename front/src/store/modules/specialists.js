@@ -51,6 +51,9 @@ const actions = {
       .then(response => commit('getReviewsWithServerAndUpdateState', response.data))
       .catch(err => console.log(err))
   },
+  getReviewsWithServerDestroy ({commit}, id) {
+    commit('getReviewsWithServerAndUpdateState', {data:[]})
+  },
 };
 
 
@@ -66,7 +69,7 @@ const mutations = {
     state.selectedSpecialistData = {...value};
   },
   getReviewsWithServerAndUpdateState(state, value) {
-    state.reviews = state.reviews.concat(value);
+    state.reviews = value;
   },
 };
 

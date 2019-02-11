@@ -7,7 +7,7 @@ import specialistPopUp from './modules/specialistPopUp'
 import specialistList from './modules/specialists'
 import other_request from './modules/other_request'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
@@ -17,4 +17,5 @@ export default new Vuex.Store({
     specialistList,
     other_request
   },
+  // strict: process.env.NODE_ENV !== 'production'
 })

@@ -24,9 +24,10 @@
         </div>
         <div class="btnCustom">
           <Button btnText="VERSTUUR"
-                  btnClass="btnOrangeNav"
-                  v-on:click-login="activContactForm()"
-                  :disabled="(contactName && contactEmail && contactPhone && contactQuestion) ===''"></Button>
+              btnClass="btnOrangeNav"
+              v-on:click-login="activContactForm()"
+              :disabled="(contactName && contactEmail && contactPhone && contactQuestion) ===''">
+          </Button>
         </div>
       </b-card>
 
@@ -83,18 +84,19 @@
                   }
               });
               if (Object.keys(this.valid).length === 4) {
-                  this.$store.dispatch('contact/contactForm',{
-                      name: this.contactName,
-                      email: this.contactEmail,
-                      phone: this.contactPhone,
-                      question: this.contactQuestion,
-                  });
+                  const data = new FormData();
+                  data.append('name_and_surname', this.contactName);
+                  data.append('email', this.contactEmail);
+                  data.append('phone_number', this.contactPhone);
+                  data.append('question', this.contactQuestion);
+                  this.$store.dispatch('contact/contactForm', data);
                   this.contactName = '';
                   this.contactEmail = '';
                   this.contactPhone = '';
                   this.contactQuestion ='';
-                  messages = {};
+                  // messages = {};
               }
+
           }
       }
   }

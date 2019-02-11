@@ -6,7 +6,7 @@
     </div>
     <div class="contact-item">
       <i class="fas fa-phone phone"></i>
-      <h3>020 26 11 813</h3>
+      <h3>085 130 3493</h3>
     </div>
 
   </div>

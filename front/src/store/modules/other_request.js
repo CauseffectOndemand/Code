@@ -70,7 +70,7 @@ const actions = {
           commit('CategoriesMut', response.data)
         })
         .catch(err => console.log(err))
-    }
+    },
 };
 
 const mutations = {
