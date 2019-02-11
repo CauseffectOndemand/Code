@@ -15,9 +15,14 @@ if ($user->is_signed_in()) {
 
         if (isset($_POST['user_uid'])) {
             $form_data = [
+                'profile_status' => $_POST['profile_status'],
                 'firstname' => $_POST['firstname'],
                 'lastname' => $_POST['lastname'],
                 'birthdate' => $_POST['birthdate'],
+                'age' => $_POST['age'],
+                'location' => $_POST['location'],
+                'years_experience' => $_POST['years_experience'],
+                'relevant_training' => $_POST['relevant_training'],
                 'role_id' => $_POST['role'],
                 'drivers_license' => $_POST['drivers_license'],
                 'email' => $_POST['email'],
@@ -52,7 +57,9 @@ if ($user->is_signed_in()) {
                 'skills' => $_POST['skills'],
                 'hourly_rate' => $_POST['hourly_rate'],
                 'user_avatar' => $_FILES['user_avatar'],
-                'old_user_avatar' => $_POST['old_user_avatar']
+                'old_user_avatar' => $_POST['old_user_avatar'],
+                'about_me' => $_POST['about_me'],
+                'user_languages' => $_POST['languages'],
             ];
 
             if ($user->update($this_user['id'], $form_data)) header("Refresh:0");
@@ -206,10 +213,11 @@ if ($user->is_signed_in()) {
         $this_user['videos'] = $user->get_user_video($this_user['id']);
         $this_user['regions'] = $geo_location->get_region(139);
         $this_user['cities'] = $geo_location->get_city(139);
+        $this_user['languages_list'] = $user->get_all_languages();//$geo_location->get_city(139);
 
         include(VIEW . 'user/profile.php');
 
-        unset($form_data, $this_user, $shifts_upcoming, $shifts_completed, $shifts_late);
+        unset($form_data, $this_user, $shifts_upcoming, $shifts_completed, $shifts_late, $hourly_rates);
 
     } else {
 

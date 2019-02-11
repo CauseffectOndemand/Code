@@ -91,7 +91,7 @@
 
               <tr>
 
-                <td>Rijbewijs</td>
+                <td>In bezit van auto</td>
 
                 <td>
 

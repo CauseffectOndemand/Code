@@ -182,9 +182,21 @@
 
                             <tr>
 
+                                <td>Status</td>
+                                <td colspan="2">
+                                    <select name="profile_status">
+                                        <option value="0">Unpublished</option>
+                                        <option <?php echo $this_user['profile_status'] == 1 ? 'selected' : '';?> value="1">Published</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
                                 <td>Avatar</td>
                                 <?php
-                                    $current_avatar = !empty($this_user['avatar']) ? '/file/avatars/'.$this_user['uid'].'/'.$this_user['avatar'] : '/image/unknown_person.png'
+                                $current_avatar = !empty($this_user['avatar']) ? '/file/avatars/'.$this_user['uid'].'/'.$this_user['avatar'] : '/image/unknown_person.png'
                                 ?>
                                 <td colspan="2">
 
@@ -217,7 +229,63 @@
                                 <td>Geboortedatum</td>
 
                                 <td colspan="2"><input name="birthdate" type="date" value="<?php echo $this_user['birthdate']; ?>"
-                                           required></td>
+                                                       required></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Age</td>
+
+                                <td colspan="2">
+                                    <input name="age" type="number" min="0" value="<?php echo intval($this_user['age']); ?>" required>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Location</td>
+
+                                <td colspan="2">
+                                    <input name="location" type="text" value="<?php echo $this_user['location']; ?>" required>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Language</td>
+
+                                <td colspan="2">
+                                    <select name="languages[]" multiple>
+                                        <?php
+                                            foreach ((array)$this_user['languages_list'] as $id=>$language) {
+                                                echo('<option value="'.$id.'" '.(in_array($id, $this_user['user_languages']) ? 'selected' : '').'>'.$language.'</option>');
+                                            }
+                                        ?>
+                                    </select>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Years experience</td>
+
+                                <td colspan="2">
+                                    <input name="years_experience" type="text" value="<?php echo $this_user['years_experience']; ?>" required>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Relevant training</td>
+
+                                <td colspan="2">
+                                    <input name="relevant_training" type="text" value="<?php echo $this_user['relevant_training']; ?>" required>
+                                </td>
 
                             </tr>
 
@@ -252,14 +320,14 @@
 
                             <tr>
 
-                                <td>Rijbewijs</td>
+                                <td>In bezit van auto</td>
 
                                 <td colspan="2">
-
                                     <select name="drivers_license">
 
-                                        <option>Ja</option>
-                                        <option>Nee</option>
+                                        <option value="0">Nee</option>
+                                        <option value="1" <?php echo $this_user['drivers_license'] == 1 ? 'selected' : '1'; ?>>Ja</option>
+
 
                                     </select>
 
@@ -311,11 +379,19 @@
                                     <select name="hourly_rate">
                                         <option value="0">not set</option>
                                         <?php
-                                            foreach ($hourly_rates as &$hourly_rate) {
-                                                echo('<option '.($hourly_rate['id'] == $this_user['hourly_rate'] ? 'selected' : '').' value="'.$hourly_rate['id'].'">'.$hourly_rate['title'].' ('.$hourly_rate['rate'].')</option>');
-                                            }
+                                        foreach ($hourly_rates as &$hourly_rate) {
+                                            echo('<option '.($hourly_rate['id'] == $this_user['hourly_rate'] ? 'selected' : '').' value="'.$hourly_rate['id'].'">'.$hourly_rate['title'].' ('.$hourly_rate['rate'].')</option>');
+                                        }
                                         ?>
                                     </select>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td>Over mij</td>
+                                <td colspan="2">
+                                    <textarea name="about_me"><?php echo $this_user['about_me'] ?></textarea>
                                 </td>
 
                             </tr>
@@ -1332,7 +1408,7 @@
                             echo('<div class="boxed-section">');
                                 foreach ($this_user['previous_work_experience'] as $previous_work_experience) {
                                     echo('
-                                    <form id="edit-prewious-work-experience" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
+                                    <form id="edit-prewious-work-experience-'.$previous_work_experience['id'].'" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
                                     
                                         <div class="section-header">
             

@@ -142,11 +142,13 @@ class User
     public function update($id, $data)
     {
 
+        $profile_status = intval($data['profile_status']);// 1 - published ; 0 - draft (unpublished)
         $firstname = addslashes($data['firstname']);
         $lastname = addslashes($data['lastname']);
         $birthdate = date('Y-m-d', strtotime($data['birthdate']));
+        $age = intval($data['age']);
         $role_id = (int)$data['role_id'];
-        $drivers_license = (int)$data['drivers_license'];
+        $drivers_license = intval($data['drivers_license']);
         $email = $data['email'];
         $password = $data['password'];
         $phone = $data['phone'];
@@ -181,6 +183,11 @@ class User
         $hourly_rate = $data['hourly_rate'];
         $user_avatar = $data['user_avatar'];
         $old_user_avatar = $data['old_user_avatar'];
+        $location = $data['location'];
+        $years_experience = $data['years_experience'];
+        $relevant_training = $data['relevant_training'];
+        $about_me = htmlspecialchars($data['about_me'],ENT_QUOTES|ENT_DISALLOWED);
+        $user_languages = serialize(array_slice($data['user_languages'], 0, 10));
 
         $avatar_sql = "";
         if($user_avatar['name'] != ''){
@@ -190,7 +197,7 @@ class User
                 if($old_user_avatar != ''){
                     delete_files($path_to_avatars.$old_user_avatar);
                 }
-                $avatar_sql = ", `avatar`='".$uploaded_file['basename']."'";
+                $avatar_sql = "`avatar`='".$uploaded_file['basename']."', ";
             }
         }
 
@@ -243,8 +250,16 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         place_to_work = '$place_to_work',
         hourly_rate = '$hourly_rate',
         city = '$city',
-        region = '$region'
+        region = '$region',
         ".$avatar_sql."
+        profile_status = '$profile_status',
+        age = '$age',
+        location = '$location',
+        relevant_training = '$relevant_training',
+        years_experience = '$years_experience',
+        about_me = '$about_me',
+        languages = '$user_languages',
+        drivers_license = '$drivers_license'
         WHERE user_id = $id;
         UPDATE user_contact SET
         phone = '$phone',
@@ -255,10 +270,10 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         country = '$country'
         WHERE user_id = $id;
         UPDATE user_clothing SET
-        shirt = $sizes_shirt,
-        pants = $sizes_pants,
-        costume = $sizes_costume,
-        shoes = $sizes_shoes
+        shirt = '$sizes_shirt',
+        pants = '$sizes_pants',
+        costume = '$sizes_costume',
+        shoes = '$sizes_shoes'
         WHERE user_id = $id;
         COMMIT;";
 
@@ -270,8 +285,11 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
                 sql::$con->store_result();
             }
 
+            //exit(sql::$con->error);
+
             return true;
         }
+
     }
 
     public function list_all()
@@ -298,7 +316,7 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
 
         $query = "SELECT user.user_id, user.user_uid, user.email, user.firstname, user.lastname,
         role.role_id, role.name AS role_name,
-        user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.region AS user_region, user_info.city AS user_city, user_info.avatar, 
+        user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.region AS user_region, user_info.city AS user_city, user_info.avatar, user_info.profile_status,
         
         user.email, user.role_id, user_contact.phone, user_contact.country, user_contact.city, user_info.birthdate, user_info.rating,
         role.name AS role_name,
@@ -331,7 +349,7 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         
         ORDER BY user.lastname ASC";
 
-        if ($res = sql::$con->query($query, MYSQLI_STORE_RESULT)) {
+        if ($res = sql::$con->query($query, MYSQLI_STORE_RESULT) or die(sql::$con->error)) {
 
             while ($data = $res->fetch_array(MYSQLI_ASSOC)) {
 
@@ -547,6 +565,8 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.avatar, user_info.region, user_info.city AS user_city,
         
         user.email, user.role_id, user_contact.phone, user_contact.country, user_contact.city, user_info.birthdate, user_info.rating, user_info.contract_end_current_time,
+        user_info.profile_status, user_info.age, user_info.about_me, 
+        user_info.location, user_info.relevant_training, user_info.years_experience, user_info.languages, 
         role.name AS role_name,
         user_place_to_work.name AS user_place_to_work,
         
@@ -587,6 +607,7 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
                 $info = [
                     'id' => $data['user_id'],
                     'uid' => $data['user_uid'],
+                    'profile_status' => $data['profile_status'],
                     'firstname' => $data['firstname'],
                     'lastname' => $data['lastname'],
                     'role_id' => $data['role_id'],
@@ -630,6 +651,12 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
                     ],
                     'place_to_work' => $data['user_place_to_work'],
                     'hourly_rate' => $data['hourly_rate'],
+                    'age' => $data['age'],
+                    'location' => $data['location'],
+                    'relevant_training' => $data['relevant_training'],
+                    'years_experience' => $data['years_experience'],
+                    'about_me' => htmlspecialchars_decode($data['about_me'], ENT_QUOTES|ENT_DISALLOWED),
+                    'user_languages' => unserialize($data['languages']),
                 ];
 
             }
@@ -1517,14 +1544,16 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         $whitelist = array('jpeg', 'jpg', 'gif', 'png');
         $upload_dir = APP . 'file/previous-work-experience/' . $data['uid'] . '/company-logo/';
         if(in_array(pathinfo($_FILES['company_logo']['name'], PATHINFO_EXTENSION), $whitelist)){
-            if(upload_files($upload_dir, $_FILES['company_logo'])){
+            if($uploaded_file = upload_files($upload_dir, $_FILES['company_logo'])){
+//print_r($uploaded_file);
+//exit;
                 //'contract_end_current_time'=>$_POST['contract_end_current_time'],
                 $query = "
                 UPDATE `previous_work_experience` SET `stop_to_work`='".date('Y-m-d', time())."',`contract_end_current_time`='0' 
                 WHERE `user_id`='$user_id' AND `contract_end_current_time`='1';
 
                 INSERT INTO `previous_work_experience`(`user_id`, `uid`, `logo_file_name`, `title`, `description`, `start_to_work`, `stop_to_work`, `contract_end_current_time`) 
-                VALUES ('".$user_id."','".$data['uid']."','".$_FILES['company_logo']['name']."','".$data['title']."',
+                VALUES ('".$user_id."','".$data['uid']."','".str_replace($upload_dir, '', $uploaded_file)."','".$data['title']."',
                 '".$data['description']."','".$data['start_to_work']."','".$data['stop_to_work']."','".$contract_end_current_time."')";
 
                 //return (bool) sql::$con->query($query);
@@ -1572,9 +1601,10 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         $whitelist = array('jpeg', 'jpg', 'gif', 'png');
         $upload_dir = APP . 'file/previous-work-experience/' . $data['uid'] . '/company-logo/';
         if( ($data['new_company_logo'] != '') and in_array(pathinfo($data['new_company_logo'], PATHINFO_EXTENSION), $whitelist) ){
-            $rewrite_filename = "`logo_file_name`='".$_FILES['new_company_logo']['name']."', ";
+
             delete_files($data['old_company_logo']);
-            upload_files($upload_dir, $_FILES['new_company_logo']);
+            $uploaded_file = upload_files($upload_dir, $_FILES['new_company_logo']);
+            $rewrite_filename = "`logo_file_name`='".str_replace($upload_dir, '', $uploaded_file)."', ";
         }else{
             $rewrite_filename = "";
         }
@@ -1989,7 +2019,6 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
      * @param int $user_id
      * @return bool
      */
-
     public function update_user_rating($user_id){
 //echo('user reting UPD<br>');
         $user_id = intval($user_id);
@@ -2030,6 +2059,50 @@ ALTER TABLE `user_skill` AUTO_INCREMENT = 1;
         return (bool) $result;
 
     }
+
+    /**
+     * Get all languages
+     *
+     * @return array
+     */
+    public function get_all_languages(){
+
+        $result = array();
+
+        $query = "SELECT `id`, `name` FROM `languages`";
+
+        if ($res = sql::$con->query($query, MYSQLI_STORE_RESULT)) {
+            while ( ($data = $res->fetch_array(MYSQLI_ASSOC)) ) {
+                $result[$data['id']] = $data['name'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update user languages
+     *
+     * @param integer $user_id
+     * @param array $languages
+     * @return bool
+     */
+    /*
+    public function update_user_languages($user_id, $languages){
+
+        $result = array();
+
+        $query = "INSERT INTO `user_languages`(`user`, `language_id`) VALUES ([value-1],[value-2],[value-3])";
+
+        if ($res = sql::$con->query($query, MYSQLI_STORE_RESULT)) {
+            while ( ($data = $res->fetch_array(MYSQLI_ASSOC)) ) {
+                $result[$data['id']] = $data['name'];
+            }
+        }
+
+        return $result;
+    }
+    */
 
 }
 

@@ -243,9 +243,10 @@ class User
 
         $query = "SELECT user.user_id, user.user_uid, user.email, user.firstname, user.lastname,
         role.role_id, role.name AS role_name,
-        user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.avatar,
+        user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.avatar, user_info.profile_status,
         
         user.email, user.role_id, user_contact.phone, user_contact.country, user_contact.city, user_info.birthdate, user_info.rating, user_info.region AS user_region, user_info.city AS user_city, 
+        user_info.age, user_info.about_me, user_info.languages, user_info.location, user_info.relevant_training, user_info.years_experience,
         role.name AS role_name,
         user_place_to_work.name AS user_place_to_work,
         
@@ -274,9 +275,11 @@ class User
         LEFT JOIN hourly_rate
         ON hourly_rate.id = user_info.hourly_rate
         
+        WHERE user_info.profile_status <> 0
+        
         ORDER BY user.lastname ASC";
 
-        if ($res = sql::$con->query($query)) {
+        if ($res = sql::$con->query($query) or die(sql::$con->error)) {
 
             while ($data = $res->fetch_array(MYSQLI_ASSOC)) {
 
@@ -317,7 +320,7 @@ class User
                     'contract_end_current_time' => $data['contract_end_current_time'],
                     'card_number' => $data['card_number'],
                     'card_exp' => date('Y-m-d', strtotime($data['card_exp'])),
-                    'drivers_license' => $data['drivers_license'],
+                    'driver_license' => $data['drivers_license'],
                     'rating' => $data['rating'],
                     'user_hourly_rate' => $data['user_hourly_rate'],
                     'user_hourly_rate_title' => $data['user_hourly_rate_title'],
@@ -337,7 +340,14 @@ class User
                     'skills' => $this->skills($data['user_id']),
                     'portfolio' => $this->get_portfolio_item( $data['user_id']),
                     'weekday_availability' => $this->get_user_weekday_availability($data['user_id']),
-                    'previous_work_experience' => $this->get_previous_work_experience($data['user_id'])
+                    'previous_work_experience' => $this->get_previous_work_experience($data['user_id']),
+                    'age' => $data['age'],
+                    'location' => $data['location'],
+                    'relevant_training' => $data['relevant_training'],
+                    'years_experience' => $data['years_experience'],
+                    'about_me' => htmlspecialchars_decode($data['about_me'], ENT_QUOTES|ENT_DISALLOWED),
+                    'user_languages' => $this->get_languages_names(unserialize($data['languages'])),
+
                 ];
 
             }
@@ -452,6 +462,8 @@ class User
         user_info.birthdate, user_info.nationality, user_info.csn, user_info.birth_country, user_info.birth_city, user_info.region AS user_region, user_info.city AS user_city, user_info.avatar,
         
         user.email, user.role_id, user_contact.phone, user_contact.country, user_contact.city, user_info.birthdate, user_info.rating, user_info.contract_end_current_time, 
+        user_info.profile_status, user_info.age, user_info.about_me, user_info.languages, 
+        user_info.location, user_info.relevant_training, user_info.years_experience, user_info.languages, 
         role.name AS role_name,
         user_place_to_work.name AS user_place_to_work,
         
@@ -478,7 +490,7 @@ class User
         
         LEFT JOIN user_place_to_work
         ON user_place_to_work.id = user_info.place_to_work
-        WHERE user.user_id = $id;";
+        WHERE user.user_id = $id AND profile_status <> 0;";
 
         if ($res = sql::$con->query($query) or die(sql::$con->error)) {
 
@@ -521,7 +533,7 @@ class User
                     'contract_end_current_time' => $data['contract_end_current_time'],
                     'card_number' => $data['card_number'],
                     'card_exp' => date('Y-m-d', strtotime($data['card_exp'])),
-                    'drivers_license' => $data['drivers_license'],
+                    'driver_license' => $data['drivers_license'],
                     'user_hourly_rate' => $data['user_hourly_rate'],
                     'user_hourly_rate_title' => $data['user_hourly_rate_title'],
                     'user_place_to_work' => $data['user_place_to_work'],
@@ -542,7 +554,13 @@ class User
                     'portfolio' => $this->get_portfolio_item( $data['user_id']),
                     'weekday_availability' => $this->get_user_weekday_availability($data['user_id']),
                     'previous_work_experience' => $this->get_previous_work_experience($data['user_id']),
-                    'user_video' => $this->get_user_video($data['user_id'])
+                    'user_video' => $this->get_user_video($data['user_id']),
+                    'age' => $data['age'],
+                    'location' => $data['location'],
+                    'relevant_training' => $data['relevant_training'],
+                    'years_experience' => $data['years_experience'],
+                    'about_me' => htmlspecialchars_decode($data['about_me'], ENT_QUOTES|ENT_DISALLOWED),
+                    'user_languages' => $this->get_languages_names(unserialize($data['languages'])),
                 ];
 
             }
@@ -563,13 +581,13 @@ class User
         $availability = [];
 
         $query = "SELECT user_availability.id, user_availability.user_id, user_availability.comment,
-      user_availability.time_start, user_availability.time_end, user_availability.type_id,
-      availability_type.description
-      FROM user_availability
-      LEFT JOIN availability_type
-      ON availability_type.type_id = user_availability.type_id
-      WHERE user_availability.user_id = $user_id
-      AND user_availability.time_start >= CURDATE();";
+        user_availability.time_start, user_availability.time_end, user_availability.type_id,
+        availability_type.description
+        FROM user_availability
+        LEFT JOIN availability_type
+        ON availability_type.type_id = user_availability.type_id
+        WHERE user_availability.user_id = $user_id
+        AND user_availability.time_start >= CURDATE();";
 
         if ($res = sql::$con->query($query)) {
 
@@ -1321,6 +1339,36 @@ class User
         }
 
         return $places_to_work;
+    }
+
+    /**
+     * Get languages names with language id
+     *
+     * @param array|integer ID or array of ID languages
+     * @return array
+     */
+    public function get_languages_names($lang_identifiers)
+    {
+        $result = array();
+        $serach_indefiers = '';
+        //if(is_array($lang_identifiers)){
+        foreach ((array)$lang_identifiers as $identifier) {
+            $serach_indefiers .= intval($identifier) . ', ';
+        }
+        $identifier = rtrim($serach_indefiers, ', ');
+        //}
+        //print_r($lang_identifiers);
+        //exit();
+        $query = "SELECT `name` FROM `languages` WHERE `id` IN ($identifier)";
+
+        if ($res = sql::$con->query($query, MYSQLI_STORE_RESULT)) {
+
+            while ($data = $res->fetch_array(MYSQLI_ASSOC)) {
+                $result[] = $data['name'];
+            }
+
+        }
+        return $result;
     }
 
 }
