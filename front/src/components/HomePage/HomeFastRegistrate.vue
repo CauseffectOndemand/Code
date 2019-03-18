@@ -1,5 +1,5 @@
 <template>
-    <b-container fluid class="main">
+    <b-container fluid class="main" v-bind:class="classObject">
         <b-row class="backgroundImage gradient-background">
             <b-col md="6">
                 <h2>
@@ -18,21 +18,30 @@
                   <input type="email" placeholder="E-mailadres" class="inputWhite" v-model="regEmail">
                   <h3 class="valid-error">{{validRegForm.email}}</h3>
                 </div>
+                <div class="btn-wrapper">
                     <button @click="onClick"
                             :disabled="regName==='' || regEmail ===''">
                         AANVRAGEN
                         <img v-lazy="src" alt="arrowWhite">
                     </button>
+                </div>
+                <div class="btn-wrap-mobile">
+                  <button @click="onClick" class="applying"
+                          :disabled="regName==='' || regEmail ===''">
+                    AANVRAGEN
+                  </button>
+                </div>
               </div>
             </b-col>
             <b-col md="4" offset-md="2" class="secondSide">
-                <h2>Heb je vragen?
-                    Wij hebben het
-                    antwoord.</h2>
+                <h2>
+                  <span>Heb je vragen?</span>
+                  <span>Wij hebben het antwoord.</span>
+                </h2>
                 <hr>
-                <p>085 130 3493</p>
+                <p class="phone-number">085 130 3493</p>
                 <p class="base-email">{{base_email}}</p>
-                <ul>
+                <ul class="links">
 
                     <!--<li><router-link to="/" @click="onScroll">Vacatures</router-link></li>
                     <li><router-link to="/onsWerk" @click="onScroll">Ons werk</router-link></li>-->
@@ -57,6 +66,11 @@
           email: '',
         },
           src:require(`../../assets/icons/arrow-long-white.png`),
+      }
+    },
+    computed: {
+      classObject: function () {
+        return {profilePage: this.$route.name === 'profile'}
       }
     },
     methods: {
@@ -87,12 +101,13 @@
         onScroll() {
           const bodyEl = document.getElementsByTagName('body')[0];
           bodyEl.scrollTop();
-        }
+        },
       },
 
     }
 </script>
 <style scoped lang="scss">
+
     .base-email {
       font-size: 35px;
 
@@ -301,6 +316,163 @@
       .secondSide hr {
         width: 14%;
         height: 0.5vw;
+      }
+    }
+
+
+    .main {
+      .btn-wrap-mobile {
+        display: none;
+      }
+    }
+
+
+    @media screen and (min-width: 769px) {
+      .main.profilePage {
+        .btn-wrap-mobile {
+          display: none;
+        }
+      }
+
+    }
+
+    @media screen and (max-width: 768px){
+      .main.profilePage {
+
+        .gradient-background {
+          background: none;
+          padding: 0;
+
+          h2 {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.8;
+          }
+
+          .phone-number {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            font-family: GolanoSemi;
+          }
+
+
+          h2 {
+            margin-bottom: 0.7em;
+            padding: 0;
+            letter-spacing: 0.5px;
+          }
+
+          .phone-number,
+          .base-email {
+            margin: 0 0 1em;
+          }
+
+          .secondSide {
+            h2 {
+              display: flex;
+              flex-direction: column;
+            }
+
+            p {
+              text-align: initial;
+            }
+
+            .links {
+              display: block;
+
+              li > a {
+                color: #333;
+                font-size: 14px;
+              }
+
+              li:not(:last-child) {
+                margin-bottom: 1em;
+              }
+            }
+          }
+
+          .btn-wrapper {
+            display: none;
+          }
+
+          .btn-wrap-mobile {
+            display: flex;
+            margin-bottom: 30px;
+            width: 100%;
+
+            button {
+              width: 100%;
+            }
+          }
+
+
+          .div-form {
+            margin: 0;
+            padding: 10px 0;
+
+            .input-item-wrapp {
+              padding: 0 10px;
+            }
+
+            .applying {
+              width: 100%;
+              background: none;
+              text-align: center;
+              color: #333;
+              border: 1px solid #FA8402;
+              font-size: 16px;
+              text-transform: uppercase;
+              border-radius: 8px;
+              padding: 7px 0;
+              margin: 0;
+
+              img {
+                display: none;
+              }
+            }
+
+            input {
+              width: 80%;
+              color: #333;
+              font-weight: 400;
+              font-size: 14px;
+              border-bottom: 1px solid #F7F7F7;
+              margin-bottom: 10px;
+              padding: 5px 0 0;
+
+
+              &::-webkit-input-placeholder {
+                color: #333;
+              }
+              &::-moz-placeholder {
+                color: #333;
+              }
+              &:-ms-input-placeholder {
+                color: #333;
+              }
+              &:-moz-placeholder {
+                color: #333;
+              }
+            }
+
+            .valid-error {
+              font-size: 12px;
+              margin-bottom: 20px;
+            }
+          }
+
+          hr {
+            display: none;
+          }
+
+          .base-email {
+            color: #333;
+            font-weight: 400;
+            font-size: 14px;
+          }
+        }
       }
     }
 </style>

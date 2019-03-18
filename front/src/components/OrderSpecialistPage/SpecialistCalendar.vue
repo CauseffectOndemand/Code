@@ -1,8 +1,11 @@
 <template>
     <div class="calendar-main">
-      <div class="btn-items">
-        <div :class="{active: activeFirst}" @click="btnClickFirst">Kennismaking inplannen</div>
-        <div :class="{active: activeLast}" @click="btnClickLast">Proefdag aanvragen</div>
+      <div>
+        <h6>Selecteer een van de opties.</h6>
+        <div class="btn-items">
+          <div :class="{active: activeFirst}" @click="btnClickFirst">Kennismaking inplannen</div>
+          <div :class="{active: activeLast}" @click="btnClickLast">Proefdag aanvragen</div>
+        </div>
       </div>
       <hr>
       <div v-if="activeFirst" class="direct">
@@ -113,18 +116,69 @@
     }
   }
 
-  @media screen  and (max-width: 500px){
-    .btn-items div {
-      font-size: 1.2rem;
+  /*@media screen  and (max-width: 500px){*/
+    /*.btn-items div {*/
+      /*font-size: 1.2rem;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen  and (max-width: 380px){*/
+    /*.btn-items {*/
+      /*div,:first-child {*/
+        /*width: 90%;*/
+        /*font-size: 1.2rem;*/
+        /*padding: 5% 0;*/
+      /*}*/
+    /*}*/
+  /*}*/
+
+  @media screen and (min-width: 769px) {
+    .calendar-main h6 {
+      display: none;
     }
   }
 
-  @media screen  and (max-width: 380px){
-    .btn-items {
-      div,:first-child {
-        width: 90%;
-        font-size: 1.2rem;
-        padding: 5% 0;
+  @media screen and (max-width: 768px) {
+    .calendar-main {
+      padding: 10px 10px 0;
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+      justify-content: space-between;
+      flex-grow: 1;
+
+
+      h6 {
+        display: flex;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 14px;
+      }
+
+      .btn-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0 0 20px;
+
+
+        > div {
+          border-radius: 30px;
+          border: none;
+          background: #F7F7F7;
+          font-size: 14px;
+          font-weight: 400;
+          width: 48%;
+          max-width: 185px;
+          text-align: center;
+          margin-bottom: 0;
+          padding: 10px 24px;
+        }
+      }
+
+      hr {
+        display: none;
       }
     }
   }

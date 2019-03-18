@@ -209,6 +209,38 @@
     }
   }
 
+  @media screen and (max-width: 768px){
+    .wrapp {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .img {
+        height: 100px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      hr {
+        display: none;
+      }
+
+      h2 {
+        font-size: 16px;
+        color: #36D0E1;
+      }
+
+      .btn {
+        display: none;
+      }
+    }
+  }
+
   @media screen  and (max-width: 600px){
     .btn {
       width: 100%;

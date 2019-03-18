@@ -1,13 +1,21 @@
 <template>
   <b-container fluid class="footer-wrapp">
     <HomeFastRegistrate></HomeFastRegistrate>
-    <b-row>
-      <b-col md="3" cols="6" class="no-padding" v-for="sotial in sotial_network" :key="sotial.classes">
-        <a :href="sotial.url" class="social-item">
-          <i class="fab" :class="sotial.classes"></i>
+    <div v-bind:class="classObject">
+      <b-row>
+          <b-col md="3" cols="6" class="no-padding" v-for="social in social_network" :key="social.classes">
+            <a :href="social.url" class="social-item">
+              <i class="fab" :class="social.classes"></i>
+            </a>
+          </b-col>
+      </b-row>
+      <div class="mobile-socials">
+        <a v-for="social in social_network" :key="social.classes" :href="social.url">
+          <i class="fab" :class="social.classesMobile"></i>
         </a>
-      </b-col>
-    </b-row>
+      </div>
+
+    </div>
   </b-container>
 </template>
 <script>
@@ -15,26 +23,35 @@
   export default {
     data(){
       return{
-        sotial_network:[
+        social_network:[
           {
             url:     'https://www.facebook.com/CauseffectNL/',
-            classes: 'fa-facebook-square'
+            classes: 'fa-facebook-square',
+            classesMobile: 'fa-facebook-f circle'
           },{
             url:     'https://www.instagram.com/causeffectnl/?hl=nl',
-            classes: 'fa-instagram'
+            classes: 'fa-instagram',
+            classesMobile: 'fa-instagram circle'
           },{
             url:     'https://twitter.com/CauseffectNL',
-            classes: 'fa-twitter'
+            classes: 'fa-twitter',
+            classesMobile: 'fa-twitter circle'
           },{
             url:     'https://www.linkedin.com/company/causeffect-nl/',
-            classes: 'fa-linkedin-in'
+            classes: 'fa-linkedin-in',
+            classesMobile: 'fa-linkedin-in circle'
           },
         ]
       }
     },
+    computed: {
+      classObject: function () {
+        return {profilePage: this.$route.name === 'profile'}
+      }
+    },
     components:{
       HomeFastRegistrate
-    }
+    },
   }
 </script>
 <style scoped>
@@ -87,6 +104,53 @@
     }
     .row {
       margin: 0;
+    }
+  }
+
+  @media screen and (min-width: 769px) {
+    .mobile-socials {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .profilePage {
+      padding: 20px 15px 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .profilePage .no-padding {
+      display: none;
+    }
+
+    .mobile-socials {display: none}
+
+    .profilePage .mobile-socials {
+      width: 60%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .profilePage .circle {
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      background: #333;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .profilePage .circle:hover {
+      cursor: pointer;
+      opacity: 0.75;
+    }
+
+    .profilePage .fab {
+      color: #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

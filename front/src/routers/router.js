@@ -13,7 +13,7 @@ export default [
     { path: '/', component: Home },
     { path: '/huurEenSpecialist', component: Specialist},
     { path: '/onsVerhaal', component: OnsVerhaal },
-    { path: '/orderSpecialist/:id', component: Profile },
+    { path: '/orderSpecialist/:id', component: Profile, name: 'profile'},
     { path: '/contact', component: Contact },
     { path: '/specialist', component: RegistrationSpecialist },
     { path: '/profile', component: OrderSpecialist },

@@ -56,13 +56,74 @@
 
                     </div>
                 </div>
+
+                <div class="mobile-specialist">
+                  <div class="main-info">
+                    <div class="img-wrapper">
+                      <img v-lazy="getBaseURL() + selectedSpecialist.user_avatar" alt="photo">
+                    </div>
+                    <div class="info">
+                      <div class="name">
+                        <span>{{ selectedSpecialist.firstname }}</span>
+                      </div>
+                      <div class="specialty">
+                        <span> {{ selectedSpecialist.role }}</span>
+                      </div>
+                      <div class="rating">
+                        <StarComponent :stars_count="Number(selectedSpecialist.rating)"></StarComponent>
+                        <RatingComponent :rating_count="Number(selectedSpecialist.rating)"></RatingComponent>
+                      </div>
+                      <div class="wage">
+                        <span>€ {{selectedSpecialist.wage}} - per uur</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="second-info">
+                    <div class="work-place">
+                      <span>{{ selectedSpecialist.user_place_to_work }}</span>
+                    </div>
+                    <div class="week-hours">
+                      <span>Beschikbaar</span>
+                      <span class="mobile_left_text_span_center_position">
+                        {{selectedSpecialist.count_user_weekday_availability_hours || 0}}  uur p/w
+                      </span>
+                    </div>
+                    <div class="point-items">
+                      <AvailabilityDays
+                        :isSmallSize="true"
+                        :days="selectedSpecialist.weekday_availability">
+                      </AvailabilityDays>
+                    </div>
+                  </div>
+                  <div class="list">
+                    <h2>Vaardigheden</h2>
+                    <ul>
+                      <li>working</li>
+                      <li>hard</li>
+                      <li>success</li>
+                    </ul>
+                  </div>
+                  <div class="btnCustom" @click="onOpenPopUp">
+                    <Button btnText="VRAAG DEZE SPECIALIST AAN"
+                            btnClass="btnOrangeNav"
+                            arrow="mobile">
+                    </Button>
+                  </div>
+                  <div class="more-details">
+                    <button v-scroll-to="'#element'">
+                      <span>More details</span>
+                      <img src="../../assets/icons/tap-arrow.svg" alt="more-details">
+                    </button>
+                  </div>
+                </div>
+
                 <hr>
 
                 <div class="skills" >
                     <h2 class="mobile_left_text">Skills</h2>
                     <div class="skills-items">
                         <div class="skills-item" v-for="skill in selectedSpecialist.skills"
-                             v-if="skill.name!== ''"
+                             v-if="skill.name !== ''"
                              v-bind:key="skill + Math.random()">
                             {{skill.name}}
                         </div>
@@ -81,6 +142,25 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="mobile-about" id="element">
+              <h2>Over mij</h2>
+              <!--<read-more-->
+                <!--class="read-more"-->
+                <!--more-str="Learn more"-->
+                <!--:text="`${selectedSpecialist.about_me}`"-->
+                <!--link="#"-->
+                <!--less-str="Read less"-->
+                <!--:max-chars="90">-->
+              <!--</read-more>-->
+              <div v-if="selectedSpecialist.about_me">
+                <ReadMore :text="selectedSpecialist.about_me" :max-chars="100"></ReadMore>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <Tabs :specialist="selectedSpecialist"></Tabs>
             </div>
 
             <div class="right-part" >
@@ -145,6 +225,8 @@
 
         </div>
 
+
+
         <Experience :previousWorkArr="selectedSpecialist.previous_work_experience"
                     :videos="selectedSpecialist.user_video">
         </Experience>
@@ -162,8 +244,10 @@
     import RatingComponent from '../common/RatingComponent';
     import AvailabilityDays from '../common/AvailabilityDays';
     import Button from '../common/Button';
+    import Tabs from './Tabs';
     import Experience from './Experience';
     import Carousel from './Carousel';
+    import ReadMore from './ReadMore'
 
     export default {
         components: {
@@ -172,7 +256,9 @@
             Carousel,
             StarComponent,
             RatingComponent,
-            AvailabilityDays
+            AvailabilityDays,
+            Tabs,
+            ReadMore,
         },
         computed:{
           ...mapGetters({
@@ -660,13 +746,213 @@
         }
     }
     @media screen and (max-width: 820px) {
-        .name-first{
-            width: 69%;
-            font-size: 1.2rem;
-        }
+      .name-first {
+        width: 69%;
+        font-size: 1.2rem;
+      }
     }
 
-    @media screen and (max-width: 720px) {
+    @media screen and (min-width: 769px){
+      .mobile-specialist,
+      .more-details {
+        display: none;
+      }
+
+      .up {
+        display: flex;
+      }
+
+      .skills,
+      .right-part {
+        display: block;
+      }
+
+      .mobile-about,
+      .tabs {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 768px){
+      .wrapp {
+        padding: 20px 15px 0;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .up,
+      .skills,
+      .right-part {
+        display: none;
+      }
+
+      .left-part {
+        border-bottom: none;
+        margin-bottom: 20px;
+
+        hr {
+          display: none;
+        }
+      }
+
+      .tabs {
+        display: block;
+      }
+
+      .mobile-about {
+        display: block;
+        padding-top: 10px;
+        margin-bottom: 10px;
+
+
+        h2 {
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+        }
+      }
+
+      .mobile-specialist {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 100px);
+
+        .main-info {
+          display: flex;
+          padding-bottom: 16px;
+          border-bottom: 1px solid #F7F7F7;
+
+          .img-wrapper {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-right: 20px;
+
+            img {
+              display: block;
+              width: 100%;
+              border-radius: 50%;
+            }
+          }
+
+          .name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+          }
+
+          .specialty {
+            font-weight: 400;
+            font-size: 14px;
+            margin-bottom: 0.5em;
+          }
+
+          .rating {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5em;
+
+
+          }
+
+          .mobile_left_text_flex_rating {
+            margin: 0 0 0 10px;
+            font-size: 14px;
+            line-height: 1;
+            padding-top: 4px;
+          }
+
+          .wage {
+            font-weight: 600;
+            font-size: 14px;
+          }
+        }
+
+        .second-info {
+          padding-bottom: 16px;
+          border-bottom: 1px solid #F7F7F7;
+
+          .work-place {
+            font-size: 12px;
+            color: #FA8402;
+            font-weight: 600;
+            padding-top: 16px;
+            margin-bottom: 0.6em;
+          }
+
+          .week-hours {
+            font-size: 14px;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 0.6em;
+          }
+        }
+
+        .list {
+          padding-top: 10px;
+
+          h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+          }
+
+          ul {
+            padding: 0 0 0 20px;
+            margin: 0;
+
+            li {
+              font-size: 14px;
+              color: #333;
+            }
+          }
+        }
+
+        .btnCustom {
+          display: flex;
+          justify-content: center;
+          padding-top: 30px;
+          margin: auto 0 30px;
+
+          button {
+            font-size: 15px;
+            text-transform: uppercase;
+            width: 100%;
+            padding: 8px 0;
+          }
+        }
+      }
+
+      .more-details {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          font-size: 12px;
+          color: #646464;
+          border: none;
+          background: none;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          outline: none;
+
+          span {
+            display: block;
+            margin-bottom: 4px;
+          }
+        }
+      }
+    }
+
+
+
+    /* @media screen and (max-width: 720px) {
         .availability-last {
           margin-top: 0 !important;
         }
@@ -755,7 +1041,7 @@
         }
         .mobile_left_text_span_center_position{
             align-self: center;
-            /*margin-left: 5px;*/
+            margin-left: 5px;
             margin: auto;
 
         }
@@ -767,94 +1053,94 @@
             padding: 9% 0;
         }
     }
+        */
+    /*@media screen and (max-width: 550px) {*/
+        /*.rij_left,.rij_right{*/
+            /*width:50%;*/
+        /*}*/
+        /*.rij_block, .rij_title{*/
+            /*width:100%;*/
+        /*}*/
+        /*h2, .rij_title{*/
+            /*font-size:15px!important;*/
+        /*}*/
+        /*.rij_left, .rij_right, .rij_block, .about_me,.rij_content{*/
+            /*font-size:13px!important;*/
+        /*}*/
+    /*}*/
+    /*@media screen and (max-width: 450px) {*/
+        /*.availability-last {*/
+          /*margin-top: 0 !important;*/
+        /*}*/
+        /*.mbo-items {*/
+            /*justify-content: center;*/
+            /*flex-wrap: wrap;*/
+        /*}*/
+        /*.mbo-item {*/
+            /*width: 36%;*/
+            /*font-size: 17px;*/
+        /*}*/
+        /*.specialty {*/
+            /*flex-direction: column;*/
+            /*p {*/
+                /*width: 100%;*/
+                /*text-align: center;*/
+            /*}*/
+            /*.rating-stars {*/
+                /*width: 100%;*/
+                /*text-align: center;*/
+            /*}*/
+        /*}*/
+        /*.name-last {*/
+            /*display: none;*/
+        /*}*/
+        /*.name-first{*/
+            /*align-items: center;*/
+        /*}*/
+        /*.name-first span{*/
+            /*font-size: 15px;*/
+        /*}*/
+        /*.mbo-item {*/
+            /*width: 26%;*/
+            /*padding: 9% 0;*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 550px) {
-        .rij_left,.rij_right{
-            width:50%;
-        }
-        .rij_block, .rij_title{
-            width:100%;
-        }
-        h2, .rij_title{
-            font-size:15px!important;
-        }
-        .rij_left, .rij_right, .rij_block, .about_me,.rij_content{
-            font-size:13px!important;
-        }
-    }
-    @media screen and (max-width: 450px) {
-        .availability-last {
-          margin-top: 0 !important;
-        }
-        .mbo-items {
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .mbo-item {
-            width: 36%;
-            font-size: 17px;
-        }
-        .specialty {
-            flex-direction: column;
-            p {
-                width: 100%;
-                text-align: center;
-            }
-            .rating-stars {
-                width: 100%;
-                text-align: center;
-            }
-        }
-        .name-last {
-            display: none;
-        }
-        .name-first{
-            align-items: center;
-        }
-        .name-first span{
-            font-size: 15px;
-        }
-        .mbo-item {
-            width: 26%;
-            padding: 9% 0;
-        }
-    }
+    /*@media screen and (max-width: 320px) {*/
+        /*.availability-last {*/
+          /*margin-top: 0 !important;*/
+        /*}*/
 
-    @media screen and (max-width: 320px) {
-        .availability-last {
-          margin-top: 0 !important;
-        }
-
-        .wrapp {
-            padding-left: 9%;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            width: 95%;
+        /*.wrapp {*/
+            /*padding-left: 9%;*/
+            /*display: -webkit-box;*/
+            /*display: -ms-flexbox;*/
+            /*display: flex;*/
+            /*width: 95%;*/
+            /*!*width: 100%;*!*/
+        /*}*/
+        /*.specialty {*/
+            /*display: flex;*/
+            /*flex-direction: column;*/
+            /*text-align: center;*/
+            /*p {*/
+                /*width: 100%;*/
+            /*}*/
+            /*.rating-stars {*/
+                /*width: 100%;*/
+            /*}*/
+        /*}*/
+        /*.name-first {*/
             /*width: 100%;*/
-        }
-        .specialty {
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            p {
-                width: 100%;
-            }
-            .rating-stars {
-                width: 100%;
-            }
-        }
-        .name-first {
-            width: 100%;
-            justify-content: center;
-        }.name-first span{
-                     font-size: 10px;
-                 }
-        .availability-first p {
-            margin: 2% 0;
-        }
-        .skills {
-            margin-left: 0;
-        }
-    }
+            /*justify-content: center;*/
+        /*}.name-first span{*/
+                     /*font-size: 10px;*/
+                 /*}*/
+        /*.availability-first p {*/
+            /*margin: 2% 0;*/
+        /*}*/
+        /*.skills {*/
+            /*margin-left: 0;*/
+        /*}*/
+    /*}*/
 </style>

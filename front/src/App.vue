@@ -1,9 +1,9 @@
 <template>
   <div class="app">
     <div v-show="clickedPopUp" class="order-specialist-wrap" @click.self="onClosePopUp()">
-      <div class="specialist-popup" style="margin-top: 5vh;">
+      <div class="specialist-popup">
 
-        <span class="form-close" >
+        <span class="form-close" :class="{popup3: partPopUp==3}">
           <img v-lazy="mysrc2" alt="close" @click="onClosePopUp()">
         </span>
 
@@ -117,10 +117,18 @@
       }
       .form-close {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 10px;
+        right: 10px;
         z-index: 1;
         cursor: pointer;
+      }
+
+      .form-close.popup3 {
+        top: calc((100vh - 200px)/2 + 10px);
+      }
+
+      .form-close img {
+        width: 70%;
       }
       @media screen and (max-width: 1200px) {
         .specialist-popup {
@@ -132,19 +140,28 @@
           width: 50%;
         }
       }
-      @media screen and (max-width: 760px) {
-        .specialist-popup{
-          width: 60%;
+      @media screen and (max-width: 768px) {
+        .specialist-popup {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
-      @media screen and (max-width: 480px) {
-        .specialist-popup{
-          width: 75%;
-        }
-      }
-      @media screen and (max-width:320px ){
-        body {
-          overflow-x: hidden;
-        }
-      }
+
+      /*@media screen and (max-width: 760px) {*/
+        /*.specialist-popup{*/
+          /*width: 60%;*/
+        /*}*/
+      /*}*/
+      /*@media screen and (max-width: 480px) {*/
+        /*.specialist-popup{*/
+          /*width: 75%;*/
+        /*}*/
+      /*}*/
+      /*@media screen and (max-width:320px ){*/
+        /*body {*/
+          /*overflow-x: hidden;*/
+        /*}*/
+      /*}*/
 </style>

@@ -23,12 +23,11 @@
   @media screen and (max-width: 720px) {
     .mobile_left_text_flex_rating{
       display: flex;
-      margin-right: 21px!important;
+      margin-right: 21px;
     }
     .mobile_left_text_span_center_position{
       align-self: center;
-      /*margin-left: 5px;*/
-      margin: auto;
+      margin-left: 5px;
     }
   }
 </style>

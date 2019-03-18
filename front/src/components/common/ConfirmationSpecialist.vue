@@ -1,6 +1,10 @@
 <template>
   <div class="wrapp">
 
+    <div class="back-arrow" @click="goBack">
+      <img src="../../assets/icons/back-arrow.svg" alt="back-arrow">
+    </div>
+
     <div class="img">
       <img v-lazy="base_url + selectedSpecialist.user_avatar" alt="photo">
     </div>
@@ -53,6 +57,7 @@
       </div>
       <div class="btnCustom">
         <Button btnText="BEVESTIG"
+                stylesImg="width:0"
                 btnClass="btnOrangeNav"
                 @click-login="activContactForm()"
                 :disabled="((companyName && contactName && contactEmail && contactPhone && contactAddress && contactPostcode
@@ -61,6 +66,75 @@
       </div>
 
     </div>
+
+    <div class="form-wrapp-mobile">
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="Bedrijfsnaam" class="inputDark" v-model="companyName">
+        </float-label>
+        <span class="valid-error">{{validMess.companyName}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="Contactpersoon" class="inputDark" v-model="contactName">
+        </float-label>
+        <span class="valid-error">{{validMess.contactName}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="E-mailadres" class="inputDark" v-model="contactEmail">
+        </float-label>
+        <span class="valid-error">{{validMess.contactEmail}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="Telefoonnummer*" class="inputDark" v-model="contactPhone">
+        </float-label>
+        <span class="valid-error">{{validMess.contactPhone}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="Adres + huisnummer" class="inputDark" v-model="contactAddress">
+        </float-label>
+        <span class="valid-error">{{validMess.contactAddress}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="Postcode + plaats" class="inputDark" v-model="contactPostcode">
+        </float-label>
+        <span class="valid-error">{{validMess.contactPostcode}}</span>
+      </div>
+
+      <div class="input-item-wrapp input-class">
+        <float-label>
+          <input type="text" placeholder="KVK nummer" class="inputDark" v-model="contactKvkAddress">
+        </float-label>
+        <span class="valid-error">{{validMess.contactKvkAddress}}</span>
+      </div>
+
+      <div class="checkbox-item">
+        <label class="container"><p>Ik ga akkoord met de algemene voorwaarden</p>
+          <input type="checkbox" v-model="checked">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <div class="btnCustom">
+        <Button btnText="BEVESTIG"
+                stylesImg="width:0"
+                btnClass="btnOrangeNav"
+                @click-login="activContactForm()"
+                :disabled="((companyName && contactName && contactEmail && contactPhone && contactAddress && contactPostcode
+              && contactKvkAddress) === '') || !checked">
+        </Button>
+      </div>
+
+    </div>
+
   </div>
 
 </template>
@@ -101,6 +175,12 @@
     methods: {
       scrollToTop() {
         window.scrollTo(0, 0);
+      },
+      goBack() {
+        this.$store.dispatch('specialistPopUp/statePopUpAct', false);
+        this.$store.dispatch('specialistList/selectedSpecialist', this.selectedSpecialist.id);
+        this.$store.dispatch('specialistPopUp/statePopUpAct', true);
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
       },
       activContactForm(){
         const patternEmail =/.+@.+\..+/i;
@@ -183,32 +263,7 @@
     border-radius: 50%;
   }
 
-  .confirmation {
-    margin-top: 3%;
-    margin-bottom: 3%;
-    color: #646464;
 
-    h2 {
-      font-size: 1.7rem;
-      font-weight: 400;
-      line-height: 50px;
-      font-family: GolanoRegular;
-      margin: 0;
-    }
-
-    span {
-      font-family: GolanoSemi;
-      font-size: 2rem;
-      font-weight: 600;
-      line-height: 50px;
-    }
-
-    p {
-      font-family: GolanoRegular;
-      font-size: 25px;
-      font-weight: 400;
-    }
-  }
 
   hr {
     width: 90%;
@@ -242,7 +297,6 @@
     margin-top: -13px;
     margin-bottom: -3%;
     cursor: pointer;
-    font-size: 22px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -344,7 +398,6 @@
     button {
       cursor: pointer;
       width: 280px;
-      font-size: 1.24vw;
       margin-left: -5%;
       padding: 2.2%;
     }
@@ -404,68 +457,236 @@
   }
 
   @media screen and (max-width: 880px) {
-    .confirmation h2 {
-      font-size: 1.5rem;
-    }
-    .confirmation span {
-      font-size: 1.6rem;
-    }
-    .confirmation p {
-      font-size: 1.5rem;
-    }
-    .inputDark {
-      font-size: 1.5rem;
-    }
-    .btnCustom button {
-      font-size: 1.3rem;
-    }
-    .container p {
-      font-size: 1.2rem;
-      margin-left: 7%;
-    }
-    .img img {
-      width: 50%;
+    .confirmation {
+      color: #646464;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 50px;
+        font-family: GolanoRegular;
+        margin: 0;
+      }
+
+      span {
+        font-family: GolanoSemi;
+        font-size: 1.6rem;
+        font-weight: 600;
+        line-height: 50px;
+      }
+
+      p {
+        font-family: GolanoRegular;
+        font-size: 25px;
+        font-weight: 400;
+      }
+
+      .inputDark {
+        font-size: 1.5rem;
+      }
+      .btnCustom button {
+        font-size: 1.3rem;
+      }
+      .container p {
+        font-size: 1.2rem;
+        margin-left: 7%;
+      }
+      .img img {
+        width: 50%;
+      }
     }
   }
 
-  @media screen and (max-width: 620px) {
+  @media screen and (min-width: 769px){
+    .back-arrow,
+    .form-wrapp-mobile {
+      display: none;
+    }
+
+    .form-wrapp {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 768px){
     .wrapp {
       width: 100%;
-    }
-    .form-wrapp {
-      margin: 0;
-      padding: 7% 0 0 6%;
+      height: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: auto;
+
+      .back-arrow {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .img {
+        width: 100px;
+        height: 100px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .confirmation {
+        margin: 0 0 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #F7F7F7;
+
+        h2 {
+          font-size: 14px;
+          color: #000000;
+          font-weight: 400;
+          line-height: 1.5;
+          height: 30px;
+          margin-bottom: 15px;
+
+          span {
+            font-size: 14px;
+          }
+        }
+
+        p {
+          font-size: 12px;
+          font-weight: 400;
+          color: #333;
+          margin-bottom: 0;
+        }
+      }
+
+      hr {
+        display: none;
+      }
+
+      .form-wrapp {
+        display: none;
+      }
+
+      .form-wrapp-mobile {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        padding: 0 0 20px;
+        margin: 0;
+
+        .btnCustom button {
+          font-size: 16px;
+          text-transform: uppercase;
+          width: 100%;
+          margin: 0;
+          padding: 7px 0;
+
+          img {
+
+          }
+        }
+      }
+
+      .input-class {
+
+        input {
+          border-bottom:  1px solid #F7F7F7;
+          font-size: 14px;
+          padding: 0 0 3px 0;
+          color: #333;
+
+        }
+
+        .valid-error {
+          font-size: 12px;
+          padding: 0 0 5px 0;
+          margin-bottom: 5px;
+        }
+      }
+
+      .checkbox-item {
+        margin: 0 0 40px;
+        padding-top: 15px;
+
+        .container {
+          padding: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        p {
+          font-size: 12px;
+          width: 100%;
+          color: #000;
+          margin: 0;
+          padding: 0 0 0 35px;
+          text-align: initial;
+        }
+
+        .checkmark {
+          height: 23px;
+          width: 23px;
+          top: 0;
+          left: 0;
+
+          &:after {
+            width: 9px;
+            height: 16px;
+            top: 0;
+            left: 6px;
+          }
+        }
+      }
     }
   }
 
-  @media screen and (max-width: 535px) {
-    .container p {
-      font-size: 1.1rem;
-      margin-left: 10%;
-    }
-  }
 
-  @media screen and (max-width: 415px) {
-    .container p {
-      font-size: 1rem;
-      margin-left: 15%;
-    }
-    .btnCustom button {
-      width: 90%;
-    }
-  }
 
-  @media screen and (max-width: 340px) {
-    .container p {
-      margin-left: 16%;
-    }
-    .confirmation h2 {
-      font-size: 1.5rem;
-    }
-    .confirmation p {
-      font-size: 1.5rem;
-    }
-  }
+  /*@media screen and (max-width: 620px) {*/
+    /*.wrapp {*/
+      /*width: 100%;*/
+    /*}*/
+    /*.form-wrapp {*/
+      /*margin: 0;*/
+      /*padding: 7% 0 0 6%;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen and (max-width: 535px) {*/
+    /*.container p {*/
+      /*font-size: 1.1rem;*/
+      /*margin-left: 10%;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen and (max-width: 415px) {*/
+    /*.container p {*/
+      /*font-size: 1rem;*/
+      /*margin-left: 15%;*/
+    /*}*/
+    /*.btnCustom button {*/
+      /*width: 90%;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen and (max-width: 340px) {*/
+    /*.container p {*/
+      /*margin-left: 16%;*/
+    /*}*/
+    /*.confirmation h2 {*/
+      /*font-size: 1.5rem;*/
+    /*}*/
+    /*.confirmation p {*/
+      /*font-size: 1.5rem;*/
+    /*}*/
+  /*}*/
 
 
 </style>

@@ -28,7 +28,7 @@
                 src3:require(`./../../assets/icons/arrow_right.png`),
                 slides: [
                     {
-                        img: require(`../../../../assets/CauseffectSl1.png`),
+                        img: require(`./../../assets/CauseffectSl1.png`),
                         id: 1
                     },
                     {
@@ -36,7 +36,7 @@
                         id: 2
                     },
                     {
-                        img: require(`../../../../assets/CauseffectSl1.png`),
+                        img: require(`./../../assets/CauseffectSl1.png`),
                         id: 3
                     },
                 ]

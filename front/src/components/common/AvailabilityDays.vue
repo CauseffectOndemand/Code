@@ -75,16 +75,23 @@
   }
 
   .point {
-    width: 40px;
-    height: 35px;
+    width: 26px;
+    height: 26px;
     background-color: #2ad0e1;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    margin-right: 2%;
-    font-size: 15px;
+    margin-right: 3px;
+    font-size: 11px;
+
+    @media screen and (min-width: 768px){
+      width: 40px;
+      height: 35px;
+      font-size: 15px;
+      margin-right: 5px;
+    }
   }
 
   .skills-items {
