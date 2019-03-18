@@ -39,9 +39,13 @@
       cursor: pointer;
     }
   }
-  @media screen  and (max-width: 800px) {
+  @media screen  and (max-width: 768px) {
     .order-main {
       width: 100%;
+      min-height: 100vh;
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
     }
   }
 

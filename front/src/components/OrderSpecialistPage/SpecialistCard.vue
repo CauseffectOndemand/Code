@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="modal-wrapper">
     <!--modal profile-->
     <div class="order-left">
       <div class="left-up">
@@ -48,6 +48,48 @@
         </div>
       </div>
       <hr>
+    </div>
+    <div class="mobile-specialist">
+      <div class="main-info">
+        <div class="avatar">
+          <div class="img-wrapper">
+            <img v-lazy="getBaseURL() + selectedSpecialist.user_avatar" alt="photo">
+          </div>
+        </div>
+        <div class="info">
+          <div class="name">
+            <span>{{ selectedSpecialist.firstname }}</span>
+          </div>
+          <div class="specialty">
+            <span> {{ selectedSpecialist.role }}</span>
+          </div>
+          <div class="wage">
+            <span>€ {{selectedSpecialist.wage}} - per uur</span>
+          </div>
+          <div class="rating">
+            <StarComponent :stars_count="Number(selectedSpecialist.rating)"></StarComponent>
+            <RatingComponent :rating_count="Number(selectedSpecialist.rating)"></RatingComponent>
+          </div>
+        </div>
+      </div>
+      <div class="second-info">
+        <div class="work-place">
+          <span>{{ selectedSpecialist.user_place_to_work }}</span>
+        </div>
+        <div class="week-hours">
+          <span>Beschikbaar</span>
+          <span class="mobile_left_text_span_center_position">
+                        {{selectedSpecialist.count_user_weekday_availability_hours || 0}}  uur p/w
+                      </span>
+        </div>
+        <div class="point-items">
+          <AvailabilityDays
+            :isSmallSize="true"
+            :days="selectedSpecialist.weekday_availability">
+          </AvailabilityDays>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -287,99 +329,223 @@
       justify-content: flex-end;
     }
   }
-  @media screen  and (max-width: 680px){
-    .wrap-item, .specialty {
+  /*@media screen  and (max-width: 680px){*/
+    /*.wrap-item, .specialty {*/
+      /*display: flex;*/
+      /*flex-direction: column;*/
+      /*align-items: center;*/
+      /*margin-bottom: 5%;*/
+    /*}*/
+    /*.name-first, .name-last {*/
+      /*justify-content: center;*/
+      /*width: 100%;*/
+    /*}*/
+    /*.availability-first {*/
+      /*width: 100%;*/
+      /*text-align: center;*/
+    /*}*/
+    /*.availability-last {*/
+      /*width: 100%;*/
+      /*justify-content: center;*/
+      /*p {*/
+        /*margin-left: 0;*/
+      /*}*/
+    /*}*/
+  /*}*/
+  /*@media screen  and (max-width: 530px){*/
+    /*.name-last {*/
+      /*display: none;*/
+    /*}*/
+    /*.name-first {*/
+      /*width: 100%;*/
+      /*justify-content: center;*/
+    /*}*/
+    /*.specialty {*/
+      /*flex-direction: column;*/
+      /*text-align: center;*/
+    /*}*/
+    /*.rating-stars {*/
+      /*width: 100%;*/
+      /*img {*/
+        /*width: 10%;*/
+      /*}*/
+    /*}*/
+    /*.availability {*/
+      /*flex-direction: column;*/
+      /*text-align: center;*/
+    /*}*/
+    /*.availability-first {*/
+      /*width: 100%;*/
+      /*p {*/
+        /*font-size: 1.3rem;*/
+      /*}*/
+    /*}*/
+    /*.availability-last {*/
+      /*width: 100%;*/
+      /*justify-content: center;*/
+      /*p {*/
+        /*margin: 0;*/
+        /*font-size: 1.3rem;*/
+      /*}*/
+    /*}*/
+    /*.up-left img {*/
+      /*width: 50%;*/
+    /*}*/
+    /*.name-first{*/
+      /*align-item: inherit*/
+    /*}*/
+  /*}*/
+  /*@media screen  and (max-width: 390px){*/
+    /*.availability-first {*/
+      /*p {*/
+        /*font-size: 1.1rem;*/
+      /*}*/
+      /*span {*/
+        /*margin-right: 1%;*/
+      /*}*/
+    /*}*/
+    /*.availability-last {*/
+      /*p {*/
+        /*font-size: 1.1rem;*/
+      /*}*/
+    /*}*/
+    /*.point-items {*/
+      /*justify-content: space-around;*/
+    /*}*/
+    /*.point {*/
+      /*width: 45px;*/
+      /*height: 45px;*/
+      /*font-size: 1rem;*/
+    /*}*/
+    /*.rating-stars img {*/
+      /*width: 12%;*/
+    /*}*/
+    /*.name-first{*/
+      /*align-item: inherit*/
+    /*}*/
+  /*}*/
+
+  @media screen and (min-width: 769px) {
+    .mobile-specialist {
+      display: none;
+    }
+
+    .order-left {
+      display: flex;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .order-left {
+      display: none;
+    }
+
+    .modal-wrapper {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .mobile-specialist {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 5%;
-    }
-    .name-first, .name-last {
-      justify-content: center;
-      width: 100%;
-    }
-    .availability-first {
-      width: 100%;
-      text-align: center;
-    }
-    .availability-last {
-      width: 100%;
-      justify-content: center;
-      p {
-        margin-left: 0;
+
+      .main-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #F7F7F7;
+
+        .avatar {
+          margin-bottom: 8px;
+        }
+
+        .img-wrapper {
+          width: 90px;
+          height: 90px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+
+          img {
+            display: block;
+            width: 100%;
+            border-radius: 50%;
+          }
+        }
+
+        .avatar,
+        .name,
+        .specialty,
+        .wage {
+          display: flex;
+          justify-content: center;
+          line-height: 1.2;
+        }
+
+        .name {
+          font-weight: 600;
+          font-size: 16px;
+          color: #333;
+        }
+
+        .specialty {
+          font-weight: 400;
+          font-size: 14px;
+          margin-bottom: 3px;
+        }
+
+        .rating {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5em;
+
+
+        }
+
+        .mobile_left_text_flex_rating {
+          margin: 0 0 0 10px;
+          font-size: 14px;
+          line-height: 1;
+          padding-top: 4px;
+        }
+
+        .wage {
+          font-weight: 600;
+          font-size: 14px;
+        }
       }
-    }
-  }
-  @media screen  and (max-width: 530px){
-    .name-last {
-      display: none;
-    }
-    .name-first {
-      width: 100%;
-      justify-content: center;
-    }
-    .specialty {
-      flex-direction: column;
-      text-align: center;
-    }
-    .rating-stars {
-      width: 100%;
-      img {
-        width: 10%;
+
+      .second-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 10px 0;
+        border-bottom: 1px solid #F7F7F7;
+
+        .work-place {
+          font-size: 12px;
+          color: #FA8402;
+          font-weight: 600;
+          margin-bottom: 5px;
+        }
+
+        .week-hours {
+          font-size: 14px;
+          font-weight: 400;
+          color: #333;
+          margin-bottom: 5px;
+        }
+
+        .point-items {
+          justify-content: flex-start;
+          margin-top: 0;
+        }
       }
-    }
-    .availability {
-      flex-direction: column;
-      text-align: center;
-    }
-    .availability-first {
-      width: 100%;
-      p {
-        font-size: 1.3rem;
-      }
-    }
-    .availability-last {
-      width: 100%;
-      justify-content: center;
-      p {
-        margin: 0;
-        font-size: 1.3rem;
-      }
-    }
-    .up-left img {
-      width: 50%;
-    }
-    .name-first{
-      align-item: inherit
-    }
-  }
-  @media screen  and (max-width: 390px){
-    .availability-first {
-      p {
-        font-size: 1.1rem;
-      }
-      span {
-        margin-right: 1%;
-      }
-    }
-    .availability-last {
-      p {
-        font-size: 1.1rem;
-      }
-    }
-    .point-items {
-      justify-content: space-around;
-    }
-    .point {
-      width: 45px;
-      height: 45px;
-      font-size: 1rem;
-    }
-    .rating-stars img {
-      width: 12%;
-    }
-    .name-first{
-      align-item: inherit
     }
   }
 </style>

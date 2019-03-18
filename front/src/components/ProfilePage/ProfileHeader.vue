@@ -161,10 +161,11 @@
       display: none;
     }
   }
-  @media screen and (max-width: 320px){
+  @media screen and (max-width: 768px){
     .wrappHead{
-      padding: 2%;
+      padding: 10px 15px;
       margin: 0;
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.05)
     }
   }
 </style>

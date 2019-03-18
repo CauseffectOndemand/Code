@@ -9,6 +9,9 @@
              alt="arrow"
              v-else-if="btnClass==='btnOrangeNav'"
              :style="stylesImg!==''?stylesImg:''">
+       <img :src="src2"
+             alt="arrow"
+             v-else-if="arrow==='mobile'">
         <img :src="src3"
              alt="arrow"
              :style="stylesImg!==''?stylesImg:''"
@@ -28,7 +31,7 @@
             btnText:'',
             arrow:'',
             btnClass:'',
-            stylesImg:'',
+            stylesImg: '',
             path:{
               type: String,
               default: () => null
@@ -61,6 +64,20 @@
         padding: 13px;
         cursor: pointer;
     }
+
+    .btn-orange {
+      background: #ff8400;
+      color: white;
+      padding: 9px 13px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 290px;
+    }
+
     .btnOrangeNav:hover {
         background: white;
         color: #ff8400;
@@ -84,6 +101,22 @@
     @media screen and (max-width: 1440px) {
       .btnWhite, .btnOrangeNav {
         padding: 10px 0;
+      }
+    }
+
+    @media screen and (min-width: 769px){
+      button {
+        img {
+          display: inline-block;
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      button {
+        img {
+          display: none;
+        }
       }
     }
 </style>

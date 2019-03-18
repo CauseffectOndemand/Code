@@ -13,8 +13,8 @@
                     </div>
                 </swiper-slide>
             </swiper>
-            <div class="swiper-button-prev" slot="button-prev"></div>
-            <div class="swiper-button-next" slot="button-next"></div>
+            <!--<div class="swiper-button-prev" slot="button-prev"></div>-->
+            <!--<div class="swiper-button-next" slot="button-next"></div>-->
         </div>
 
         <!--viewer-->
@@ -43,8 +43,8 @@
                     spaceBetween: 0,
                     breakpoints: {
                         768: {
-                            slidesPerView: 1,
-                            spaceBetween: 10
+                            slidesPerView: 2.3,
+                            spaceBetween: 15
                         },
                         1107: {
                             slidesPerView: 2,
@@ -171,97 +171,143 @@
         }
     }
 
-    @media screen and (max-width: 767px) {
-        .carousel-portfolio img {
-            width: 100%;
-        }
+    @media screen and (max-width: 768px){
+      .portfolio-main {
+        width: 100%;
+        padding: 10px 15px 0;
+        margin: 0;
+
         h2 {
-            font-size: 2rem;
+          margin: 0 0 10px;
+          padding: 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
         }
+
+        .slider-wrap-main {
+          padding-bottom: 25px;
+          border-bottom: 1px solid #F7F7F7;
+        }
+
+        .swiper-container {
+          width: 100%;
+        }
+
+        .swiper-slide {
+          width: auto;
+          height: auto;
+        }
+
+        .carousel-portfolio {
+          margin: 0;
+          height: 135px;
+          width: 135px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+      }
     }
 
-    @media screen and (max-width: 720px) {
-        h2 {
-            padding-left: 9%;
-        }
-        .slick-slider {
-            margin-left: 0;
-        }
-        .portfolio-main {
-            margin-top: 10%;
-            padding-left: 0;
-            width: 100%;
-        }
-    }
+    /*@media screen and (max-width: 767px) {*/
+        /*.carousel-portfolio img {*/
+            /*width: 100%;*/
+        /*}*/
+        /*h2 {*/
+            /*font-size: 2rem;*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 625px) {
-        .swiper-button-prev {
-            left: 0;
-        }
-        .swiper-button-next {
-            right: 0;
-        }
-    }
+    /*@media screen and (max-width: 720px) {*/
+        /*h2 {*/
+            /*padding-left: 9%;*/
+        /*}*/
+        /*.slick-slider {*/
+            /*margin-left: 0;*/
+        /*}*/
+        /*.portfolio-main {*/
+            /*margin-top: 10%;*/
+            /*padding-left: 0;*/
+            /*width: 100%;*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 520px) {
-        .portfolio-main {
-            width: 100%;
-            padding: 0;
-            h2 {
-                margin: 10% 0;
-            }
-        }
-        .portfolio-items {
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-        }
-        .portfolio-item {
-            width: 100%;
-            margin-bottom: 5%;
-            img {
-                width: 100%;
-            }
-        }
-        .btnCustom {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            width: 100%;
-            button {
-                width: 90%;
-                font-size: 1.1rem;
-                margin: 3% auto;
-            }
-        }
-    }
+    /*@media screen and (max-width: 625px) {*/
+        /*.swiper-button-prev {*/
+            /*left: 0;*/
+        /*}*/
+        /*.swiper-button-next {*/
+            /*right: 0;*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 440px) {
-        .btnCustom button {
-            font-size: 0.7rem;
-        }
-    }
+    /*@media screen and (max-width: 520px) {*/
+        /*.portfolio-main {*/
+            /*width: 100%;*/
+            /*padding: 0;*/
+            /*h2 {*/
+                /*margin: 10% 0;*/
+            /*}*/
+        /*}*/
+        /*.portfolio-items {*/
+            /*display: flex;*/
+            /*width: 100%;*/
+            /*flex-direction: column;*/
+        /*}*/
+        /*.portfolio-item {*/
+            /*width: 100%;*/
+            /*margin-bottom: 5%;*/
+            /*img {*/
+                /*width: 100%;*/
+            /*}*/
+        /*}*/
+        /*.btnCustom {*/
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*flex-direction: column;*/
+            /*width: 100%;*/
+            /*button {*/
+                /*width: 90%;*/
+                /*font-size: 1.1rem;*/
+                /*margin: 3% auto;*/
+            /*}*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 414px) {
-        .slider-swiper-main {
-            width: 100%;
-        }
-    }
+    /*@media screen and (max-width: 440px) {*/
+        /*.btnCustom button {*/
+            /*font-size: 0.7rem;*/
+        /*}*/
+    /*}*/
 
-    @media screen and (max-width: 320px) {
-        .portfolio-main {
-            padding: 0;
-            width: 100%;
-        }
-        .portfolio-item {
-            width: 96%;
-        }
-        .btnCustom button {
-            width: 96%;
-            font-size: 13px;
-            margin-bottom: 5%;
-            margin-left: 0;
-            padding: 5% 0;
-        }
-    }
+    /*@media screen and (max-width: 414px) {*/
+        /*.slider-swiper-main {*/
+            /*width: 100%;*/
+        /*}*/
+    /*}*/
+
+    /*@media screen and (max-width: 320px) {*/
+        /*.portfolio-main {*/
+            /*padding: 0;*/
+            /*width: 100%;*/
+        /*}*/
+        /*.portfolio-item {*/
+            /*width: 96%;*/
+        /*}*/
+        /*.btnCustom button {*/
+            /*width: 96%;*/
+            /*font-size: 13px;*/
+            /*margin-bottom: 5%;*/
+            /*margin-left: 0;*/
+            /*padding: 5% 0;*/
+        /*}*/
+    /*}*/
 </style>

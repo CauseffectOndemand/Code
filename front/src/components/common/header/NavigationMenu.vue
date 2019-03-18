@@ -13,7 +13,7 @@
                 <i :class="[lines, burgerColor]"></i>
               </i>
               <i class="lines-button">
-                <i :class="[lines,linesLast, burgerColor]"></i>
+                <i :class="[lines, burgerColor]"></i>
               </i>
             </span>
             <transition name="slide">
@@ -66,8 +66,7 @@
               burgerShow:false,
               showSearch: false,
               imageCl: require(`../../../assets/icons/close.png`),
-              lines: 'lines',
-              linesLast: 'lines-last'
+              lines: 'lines'
             }
         },
         props: {
@@ -189,9 +188,7 @@
   .color-white {
     background-color: white !important;
   }
-  .lines-last {
-    width: 1.4rem;;
-  }
+
   /*.line {*/
     /*height: 43px;*/
     /*width: 2px;*/
@@ -212,8 +209,6 @@
       display: none;
       width: 20%;
       justify-content: flex-end;
-
-
     }
     .listBurger{
         position: relative;
@@ -393,6 +388,35 @@
         margin-top: 20px;
       }
     }
+
+  @media screen and (max-width: 768px) {
+    .logoItem {
+      margin: 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .burgerMenu {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        width: auto;
+      }
+
+    }
+
+    .navbar-brand {
+      width: 45%;
+      max-width: 140px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
   @media screen  and (max-width: 650px){
 
     .toggle-menu{

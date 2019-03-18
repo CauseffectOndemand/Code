@@ -30,14 +30,14 @@
         <Button
           btnText="BEVESTIG"
           btnClass="btnOrangeNav"
-          stylesImg="width:25px">
+          arrow="mobile">
         </Button>
       </div>
       <div class="btn-wrap">
         <Button
           btnText="BEKIJK PROFIEL"
           btnClass="btnWhite"
-          stylesImg="width:25px">
+          arrow="mobile">
         </Button>
       </div>
     </div>
@@ -95,7 +95,7 @@
   }
   .direct-main {
     width: 100%;
-    margin-top: 7%;
+    /*margin-top: 7%;*/
   }
 
   p {
@@ -222,72 +222,108 @@
     }
   }
 
-  @media screen  and (max-width: 600px){
-    .footer button {
-      font-size: 1rem;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-    }
-    p {
-      font-size: 1.2rem;
-    }
+  @media screen and (max-width: 768px) {
     .footer {
       flex-direction: column;
       align-items: center;
-    }
-    .btn-wrap {
-      width: 80%;
-      margin-bottom: 5%;
+      margin-top: 0;
+
+      .btn-wrap {
+        width: 100%;
+      }
+
+      .btn-wrap:not(:last-child) {
+        margin-bottom: 15px;
+      }
+
+      .direct-main {
+        margin-top: 0;
+      }
+
+      button {
+        padding: 10px 0;
+
+        img {
+          display: none;
+        }
+      }
+
+      .btn-wrap:last-child {
+        button {
+          color: #333;
+          border: 1px solid #FA8402;
+        }
+      }
     }
   }
 
-  @media screen  and (max-width: 540px){
-    .time-group {
-      width: 90%;
-    }
-  }
-  @media screen  and (max-width: 510px){
-    p {
-      font-size: 1rem;
-    }
-    .time-text {
-      font-size: 1.3rem;
-    }
-  }
-  @media screen  and (max-width: 460px){
-    .active-hour p {
-      font-size: 1.2rem;
-    }
-    .direct-items {
-      padding: 0 2%;
-    }
 
-    .time-group-text {
-      display: flex;
-      align-items: center;
-    }
-  }
-  @media screen  and (max-width: 380px){
-    .hour-items {
-      flex-wrap: wrap;
-    }
-    p {
-      font-size: 1.3rem;
-    }
-    .time-text {
-      font-size: 1.2rem;
-    }
-    .active-hour p {
-      font-size: 1.3rem;
-    }
-  }
+  /*@media screen  and (max-width: 600px){*/
+    /*.footer button {*/
+      /*font-size: 1rem;*/
+    /*}*/
 
-  @media screen  and (max-width: 325px){
-    .btn-wrap {
-      width: 85%;
-    }
-  }
+    /*h2 {*/
+      /*font-size: 1.5rem;*/
+    /*}*/
+    /*p {*/
+      /*font-size: 1.2rem;*/
+    /*}*/
+    /*.footer {*/
+      /*flex-direction: column;*/
+      /*align-items: center;*/
+    /*}*/
+    /*.btn-wrap {*/
+      /*width: 80%;*/
+      /*margin-bottom: 5%;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen  and (max-width: 540px){*/
+    /*.time-group {*/
+      /*width: 90%;*/
+    /*}*/
+  /*}*/
+  /*@media screen  and (max-width: 510px){*/
+    /*p {*/
+      /*font-size: 1rem;*/
+    /*}*/
+    /*.time-text {*/
+      /*font-size: 1.3rem;*/
+    /*}*/
+  /*}*/
+  /*@media screen  and (max-width: 460px){*/
+    /*.active-hour p {*/
+      /*font-size: 1.2rem;*/
+    /*}*/
+    /*.direct-items {*/
+      /*padding: 0 2%;*/
+    /*}*/
+
+    /*.time-group-text {*/
+      /*display: flex;*/
+      /*align-items: center;*/
+    /*}*/
+  /*}*/
+  /*@media screen  and (max-width: 380px){*/
+    /*.hour-items {*/
+      /*flex-wrap: wrap;*/
+    /*}*/
+    /*p {*/
+      /*font-size: 1.3rem;*/
+    /*}*/
+    /*.time-text {*/
+      /*font-size: 1.2rem;*/
+    /*}*/
+    /*.active-hour p {*/
+      /*font-size: 1.3rem;*/
+    /*}*/
+  /*}*/
+
+  /*@media screen  and (max-width: 325px){*/
+    /*.btn-wrap {*/
+      /*width: 85%;*/
+    /*}*/
+  /*}*/
 
 </style>
