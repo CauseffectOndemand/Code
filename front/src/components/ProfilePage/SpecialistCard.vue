@@ -760,7 +760,12 @@
 
         }
         .name-last {
-            display: none;
+            // display: none;
+            width: 100%;
+            p {
+                margin-top: 0;
+                text-align: right;
+            }
         }
         .mbo-item {
             width: 26%;
@@ -806,7 +811,15 @@
             }
         }
         .name-last {
-            display: none;
+            //display: none;
+            p {
+                margin-top: -0.5rem;
+                margin-bottom: 0.5rem;
+                font-size: 1rem;
+                span {
+                    font-size: 1.1rem;
+                }
+            }
         }
         .name-first{
             align-items: center;

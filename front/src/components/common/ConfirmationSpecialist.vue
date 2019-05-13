@@ -30,7 +30,7 @@
         <input type="text" placeholder="Telefoonnummer*" class="inputDark" v-model="contactPhone">
         <span class="valid-error">{{validMess.contactPhone}}</span>
       </div>
-      <div class="input-item-wrapp input-class">
+      <!--<div class="input-item-wrapp input-class">
         <input type="text" placeholder="Adres + huisnummer" class="inputDark" v-model="contactAddress">
         <span class="valid-error">{{validMess.contactAddress}}</span>
       </div>
@@ -43,11 +43,12 @@
       <div class="input-item-wrapp input-class">
         <input type="text" placeholder="KVK nummer" class="inputDark" v-model="contactKvkAddress">
         <span class="valid-error">{{validMess.contactKvkAddress}}</span>
-      </div>
+      </div>-->
 
       <div class="checkbox-item">
-        <label class="container"><p>Ik ga akkoord met de algemene voorwaarden</p>
-          <input type="checkbox" v-model="checked">
+        <label class="container">Ik ga akkoord met de 
+          <a href="./static/Algemene_Voorwaarden_Causeffect_On_Demand_ruw.pdf" target="blank">algemene voorwaarden</a>
+          <input type="checkbox" v-model="checked" >
           <span class="checkmark"></span>
         </label>
       </div>
@@ -55,8 +56,7 @@
         <Button btnText="BEVESTIG"
                 btnClass="btnOrangeNav"
                 @click-login="activContactForm()"
-                :disabled="((companyName && contactName && contactEmail && contactPhone && contactAddress && contactPostcode
-              && contactKvkAddress) === '') || !checked">
+                :disabled="((companyName && contactName && contactEmail && contactPhone) === '') || !checked">
         </Button>
       </div>
 
@@ -134,16 +134,16 @@
             this.validMess[fieldName] = '';
           }
         });
-        if (Object.keys(this.valid).length === 7) {
+        if (Object.keys(this.valid).length === 4) {
           const data = new FormData();
           data.append('profile_form', 1);
           data.append('company_name', this.contactName);
           data.append('contact', this.companyName);
           data.append('email', this.contactEmail);
           data.append('phone_number', this.contactPhone);
-          data.append('address_and_house_number', this.contactAddress);
-          data.append('city_and_postcode', this.contactPostcode);
-          data.append('kvk_number', this.contactKvkAddress);
+          // data.append('address_and_house_number', this.contactAddress);
+          // data.append('city_and_postcode', this.contactPostcode);
+          // data.append('kvk_number', this.contactKvkAddress);
           this.$store.dispatch('specialistPopUp/specialistFormSend', data);
           this.$store.dispatch('specialistPopUp/partPopUpAct', 3);
           this.contactName = '';
@@ -338,6 +338,9 @@
     margin-left: -2%;
     margin-top: 8%;
     margin-bottom: 7%;
+    a {
+      color: #ff8400;
+    }
   }
 
   .btnCustom {

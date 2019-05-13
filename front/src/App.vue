@@ -134,12 +134,12 @@
       }
       @media screen and (max-width: 760px) {
         .specialist-popup{
-          width: 60%;
+          width: 80%;
         }
       }
       @media screen and (max-width: 480px) {
         .specialist-popup{
-          width: 75%;
+          width: 95%;
         }
       }
       @media screen and (max-width:320px ){

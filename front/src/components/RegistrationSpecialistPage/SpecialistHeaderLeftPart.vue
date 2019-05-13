@@ -32,13 +32,15 @@
           </div>
         </div>
         <div class="checkbox-item">
-          <label class="container">Ik ga akkoord met de algemene voorwaarden
+          <label class="container">Ik ga akkoord met de 
+            <a href="./static/Algemene_Voorwaarden_Causeffect_On_Demand_ruw.pdf" target="blank">algemene voorwaarden</a>
             <input type="checkbox" v-model="checked" >
             <span class="checkmark"></span>
           </label>
         </div>
 
       </div>
+      <div class="small font-weight-bold">{{ status }}</div>
       <div class="btnCustom">
         <Button btnText="AANMELDEN"
                 btnClass="btnOrangeNav"
@@ -71,6 +73,7 @@
             phone:'',
             web:'',
           },
+          status: '',
       }
     },
 
@@ -118,6 +121,16 @@
           this.formData.append('phone_number', this.contactPhone);
           this.formData.append('web_site', this.contactWeb);
           this.$store.dispatch('specialistPopUp/specialistFormSend', this.formData);
+          this.$store.dispatch('specialistPopUp/partPopUpAct', 3);
+            // .then(response => {             
+            //   this.$store.dispatch("specialistPopUp/getSpecialistFormSendStatus")
+            //     .then(response => {
+            //       setTimeout(() => {
+            //         console.log(response);
+            //         this.status = response;
+            //         }, 2000);
+            //     });
+            // })
           this.formData = new FormData();
           this.contactName = '';
           this.contactEmail = '';
@@ -206,32 +219,45 @@
   }
   .upload-items {
     display: flex;
-    height: auto;
+    // height: auto;
     width: 100%;
-    margin-left: -1.5%;
+    // margin-left: -1.5%;
   }
   .upload-item {
-    border-radius: 5px;
-    border: 2px solid #b7b7b7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 20%;
+    // border-radius: 5px;
+    // border: 2px solid #b7b7b7;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // width: 20%;
     padding: 10px;
     /*padding-top: 6.3%;*/
     margin-right: 3%;
     cursor: pointer;
+    border: 3px solid #ff8400;
+    color: #ff8400;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 152px;
     div{
       color: #000000;
       font-family: GolanoRegular;
       font-size: 15px;
       font-weight: 400;
-    display: flex;
+      display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
     }
-
+    label {
+      margin-bottom: 0;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    &:hover {
+      background: #ff8400;
+      color: white;
+    }
   }
   .row {
     margin: 0;
@@ -242,6 +268,9 @@
     margin-left: -4%;
     margin-top: 11%;
     margin-bottom: 7%;
+    a {
+      color: #ff8400;
+    }
   }
   .valid-error {
     color: #f97e7e;
@@ -343,6 +372,7 @@
       border-radius: 10px;
     }
   }
+
   @media screen and (max-width:1440px ){
     .card-body {
       padding: 1%;
@@ -356,9 +386,9 @@
     .input-class {
       margin-bottom: 1%;
     }
-    .upload-item {
-      width: 25%;
-    }
+    // .upload-item {
+    //   width: 25%;
+    // }
     .container {
       padding-left: 17%;
       padding-top: 2%;
@@ -432,12 +462,17 @@
     }
     .upload-items {
       justify-content: center;
+      margin-bottom: 1rem;
     }
     .upload-item {
-      padding-top: 4%;font-size: 15px;
+      // padding-top: 4%;
+      font-size: 15px;
+      margin-right: 1.5%;
+      margin-left: 1.5%;
+      min-width: 145px;
     }
     .upload-item p {
-      padding-bottom: 15%;
+      // padding-bottom: 15%;
     }
   }
 
@@ -488,7 +523,7 @@
   }
   @media screen  and (max-width: 320px){
     .upload-item {
-      width: 30%;
+      // width: 30%;
     }
     .btnCustom button {
       font-size: 1.3rem;

@@ -20,7 +20,7 @@
             </b-container>
 
           <!-- swiper -->
-          <div class="slider-wrap-main">
+          <div class="slider-wrap-main d-none">
             <swiper :options="swiperOption" class="slider-swiper-main">
               <swiper-slide class="swiper-item" v-for="n in 10" :key="n +Math.random()" :src="sourceImages(n)">
                 <img :src="sourceImages(n)" :alt="'portfolio item №'+n">

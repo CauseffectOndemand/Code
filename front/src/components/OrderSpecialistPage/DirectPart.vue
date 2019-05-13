@@ -51,13 +51,13 @@
             stylesImg="width:25px">
           </Button>
         </div>
-        <div class="btn-wrap"  @click="backToProfilePage">
+        <!--<div class="btn-wrap"  @click="backToProfilePage">
           <Button
             btnText="BEKIJK PROFIEL"
             btnClass="btnWhite"
             stylesImg="width:25px">
           </Button>
-        </div>
+        </div>-->
       </div>
     </div>
 </template>

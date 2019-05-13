@@ -16,13 +16,14 @@
                 </div>
                 <div class="input-item-wrapp input-class">
                   <input type="email" placeholder="E-mailadres" class="inputWhite" v-model="regEmail">
-                  <h3 class="valid-error">{{validRegForm.email}}</h3>
+                  <h5 class="valid-error">{{validRegForm.email}}</h5>
                 </div>
-                    <button @click="onClick"
-                            :disabled="regName==='' || regEmail ===''">
-                        AANVRAGEN
-                        <img v-lazy="src" alt="arrowWhite">
-                    </button>
+                <div class="text-white lead font-weight-bold">{{ status }}</div>
+                <button @click="onClick"
+                        :disabled="regName==='' || regEmail ===''">
+                    AANVRAGEN
+                    <img v-lazy="src" alt="arrowWhite">
+                </button>
               </div>
             </b-col>
             <b-col md="4" offset-md="2" class="secondSide">
@@ -49,14 +50,17 @@
   export default {
     data() {
       return {
-          base_email: base_email,
+        base_email: base_email,
         regName: '',
         regEmail:'',
         validRegForm: {
           name: '',
           email: '',
         },
-          src:require(`../../assets/icons/arrow-long-white.png`),
+        src:require(`../../assets/icons/arrow-long-white.png`),
+        status: '',
+        statusSuccess: 'Gegevens zijn succesvol verzonden!',
+        statusFail: 'Er is iets fout gegaan. Probeer opnieuw alstublieft.',
       }
     },
     methods: {
@@ -80,8 +84,24 @@
               data.append('user_email', this.regEmail);
               data.append('user_name', this.regName);
               axios.post('/public/api/send_email.php', data)
-                  .then(response => console.log(response))
-                  .then(err => console.log(err));
+                  .then(response => {
+                      console.log(response);
+                      if (response.data == 'ok') {
+                        this.status = this.statusSuccess;
+                        this.regName = '';
+                        this.regEmail = '';
+                        return this.status;
+                      }  
+                      else {
+                        this.status = this.statusFail;
+                        return this.status;
+                      }
+                  })
+                  .then(err => {
+                      console.log(err);
+                      this.status = err;
+                      return this.status;
+                  });
           }
         },
         onScroll() {

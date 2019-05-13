@@ -12,7 +12,7 @@
           van Causeffect.
         </p>
         <div class="btnCustom">
-          <router-link to="/">
+          <router-link to="/freelancers">
             <Button btnText="VRAAG EEN SPECIALIST AAN"
                     btnClass="btnOrangeNav">
             </Button>

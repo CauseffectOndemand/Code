@@ -3,7 +3,7 @@
       <div class="text-center">
           <h2>Diverse communicatie specialisten staan voor je klaar</h2>
           <p>Copywriters al vanaf  <b>€27,50 </b> per uur</p>
-          <Button :path="'/huurEenSpecialist'"
+          <Button :path="'/freelancers'"
                   btnClass="btnWhite"
                   btnText="BEKIJK ALLE SPECIALISTEN">
           </Button>

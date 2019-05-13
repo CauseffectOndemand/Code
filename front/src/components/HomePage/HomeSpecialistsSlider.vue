@@ -13,7 +13,9 @@
                     :user_avatar_url="specialist.user_avatar"
                     :specialistId="specialist.id"
                     :stars="calcRating(specialist.rating)"
-                    :type="'stars'">
+                    :type="'stars'"
+                    :rate="specialist.wage"
+                    :years="specialist.years_experience">
                   </Anketa>
                 </swiper-slide>
 
@@ -25,7 +27,7 @@
         </b-row>
         <b-row>
             <b-col class="btnCenter">
-                <Button :path="'/huurEenSpecialist'"
+                <Button :path="'/freelancers'"
                         btnText="BEKIJK ALLE SPECIALISTEN"
                         btnClass="btnWhite"
                 ></Button>

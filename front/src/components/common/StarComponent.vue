@@ -17,8 +17,8 @@
     },
     data() {
       return {
-        star_img_url: require(`../../../../assets/icons/star-active.png`),
-        empty_star_img_url: require(`../../../../assets/icons/empty-star-active.png`),
+        star_img_url: require(`./../../assets/icons/star-active-o.png`),
+        empty_star_img_url: require(`./../../assets/icons/empty-star-active-o.png`),
       }
     },
     methods: {

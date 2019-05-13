@@ -1,22 +1,42 @@
 <template>
-    <div class="wrapp">
+    <div class="wrapp row px-3 px-sm-0">
 
-        <div class="price-items">
-            <div class="price-item" v-for="price in priceList" :key="Math.random()">
-                <img @click.self="onClickPrice(price.val)"
-                     :src="price.img"
-                     :class="{priceActive: price.val === filters.user_hourly_rate}"
-                     alt="image">
-                <h2>{{ price.title }}</h2>
-                <span> &#8364; {{ price.text }}</span>
+      <div class="col-12 px-2 pl-sm-3 pr-sm-0 search-block order-1 order-lg-0 mt-5 mt-lg-0 mb-2 mb-lg-0">
+        <div class="row justify-content-end w-100 m-0">
+            <div class="col-lg-5 px-0 input-block">
+                <i class="fas fa-search icon-input"></i>
+                <input type="text" 
+                        class="w-100 form-control-lg" 
+                        placeholder="Probeer 'Graphic Design'" 
+                        v-model="searchModel"
+                        @input="onSearchChange">
             </div>
+            <a class="btn btn-lg btn-info"
+                @click="onSearchChange">
+                Zoek nu!
+            </a>
         </div>
-      <div class="filters">
+      </div>    
+      <div class="col-12 px-0 order-0 order-lg-1">
+        <p class="mt-5 preCellMargin">Selecteer een vakgebied</p>
+        <div class="row cellMargin mt-3 spec-list justify-content-between flex-nowrap">
+            <HomeCellSkill v-for="(cell,index) in cells"
+                        :key="Math.random()+index"
+                        :img_url="cell.img_url"
+                        :name="cell.name"
+                        :role="filters.role"
+                        @toFilters='onToFilters'>
+            </HomeCellSkill>
+        </div>    
+      </div>
+
+      <div class="filters order-2">
           <div class="filter-item">
               <vue-single-select
-                v-model="filters.role"
-                placeholder="Specialismen"
-                :options="rolesList == 'DTP’er' ? 'Fotograaf' : rolesList"
+                v-model="filters.user_hourly_rate"
+                placeholder="Uur tarief"
+                :options="priceList"
+                option-label="title"
                 :required="true"
                 class="input-cast"
               ></vue-single-select>
@@ -54,22 +74,28 @@
           </div>
       </div>
 
-        <b-container fluid class="anketa-items">
-            <b-row>
-                <b-col class="anketa-item" v-for="profile in filteredSpecialistList" xl="4" sm="6"
-                       :key="profile.id + Math.random()">
-                    <Anketa
-                            :user_avatar_url="profile.user_avatar"
-                            :name="profile.firstname"
-                            :lastName="profile.lastname"
-                            :role="profile.role"
-                            :specialistId="profile.id"
-                            :stars="Number(profile.rating)"
-                            :type="'stars'">
-                    </Anketa>
-                </b-col>
-            </b-row>
-        </b-container>
+      <b-container fluid class="anketa-items order-3">
+        <b-row>
+            <h3 v-if="notFound" class="col text-center text-muted">Geen specialist gevonden</h3>
+        </b-row>
+        <b-row>
+            <b-col class="anketa-item" v-for="profile in filteredSpecialistList" xl="4" sm="6"
+                :key="profile.id + Math.random()">
+                <Anketa
+                        :user_avatar_url="profile.user_avatar"
+                        :name="profile.firstname"
+                        :lastName="profile.lastname"
+                        :role="profile.role"
+                        :specialistId="profile.id"
+                        :stars="Number(profile.rating)"
+                        :type="'stars'"
+                        :rate="profile.wage"
+                        :years="profile.years_experience">
+                </Anketa>
+            </b-col>
+        </b-row>
+      </b-container>
+
 
     </div>
 </template>
@@ -77,62 +103,147 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex';
     import axios from "../../axios.config";
+    import HomeCellSkill from '../HomePage/HomeCellSkill';
     import VueSingleSelect from "vue-single-select";
     import Anketa from '../Anketa';
     import AnketaDisabled from './AnketaDisabled';
     import AnketaInConversation from './AnketaInConversation';
-    import {swiper, swiperSlide} from 'vue-awesome-swiper'
+    import {swiper, swiperSlide} from 'vue-awesome-swiper';
+
 
     export default {
         data() {
             return {
                 filters: {
-                    user_hourly_rate: "30.00",
+                    user_hourly_rate: "",
                     role: '',
                     user_place_to_work: '',
                     user_region: '',
                     user_city: '',
+                    searchReq: '',
                 },
                 priceList: [
                     {
-                        img: require(`../../assets/semi.png`),
-                        title: "Semi Pro",
+                        title: "€30 - €35",
                         text: "30 p.u",
                         val: "30.00",
                     },
                     {
-                        img: require(`../../assets/pro.png`),
-                        title: "Pro",
+                        title: "€35 ­- €45",
+                        text: "35 p.u",
+                        val: "35.00",
+                    },
+                    {
+                        title: "€45 +",
                         text: "45 p.u",
                         val: "45.00",
                     },
-                    {
-                        img: require(`../../assets/expert.png`),
-                        title: "Expert",
-                        text: "55 p.u",
-                        val: "55.00",
-                    },
                 ],
+                searchModel: '',
+                notFound: false,
+                filtersNotEmpty: {}
             }
 
         },
+        components: {
+            VueSingleSelect,
+            Anketa,
+            HomeCellSkill,
+            AnketaDisabled,
+            AnketaInConversation
+        },
         created(){
-            this.filters.role = this.$router.history.current.query.role;
-            this.$router.push({ path: 'huurEenSpecialist', query: {
-              ...this.filters
-            }});
+            let roleLink = this.roleLinks.filter(item => item.link === this.$route.params.role);
+            this.filters.role =  roleLink[0] ? roleLink[0].name : this.$route.params.role; //this.$router.history.current.query.role;
+            
+            // let filtersNotEmpty = new Object();
+            Object.keys(this.filters).forEach(key => {
+                if (this.filters[key])
+                    this.filtersNotEmpty[key] = this.filters[key];
+            });
+         
+            if (this.filters.role) {
+
+                /**** dynamic SEO start ****/
+                this.$route.meta.title = roleLink[0] ? roleLink[0].title : "Freelancers";
+                let descr = roleLink[0] ? roleLink[0].descr : "Freelancers";
+                this.$route.meta.metaTags = [
+                    {
+                        name: 'description',
+                        content: descr
+                    }
+                ]
+                /**** dynamic SEO end ****/
+                this.$router.push({ path: `/freelancers/${roleLink[0].link}` , query: {
+                    ...this.filtersNotEmpty
+                    }
+                });
+                
+                
+            } else {
+                // console.log(this.filtersNotEmpty);
+                this.$router.push({ path: `/freelancers`, query: {
+                    ...this.filtersNotEmpty
+                    }
+                });
+            }
+            
+            
         },
         mounted: function () {
           this.$store.dispatch('other_request/get_data_with_server');
+          this.$store.dispatch('other_request/getCategoriesWithServer');
+        //   this.$route.meta.title = this.$route.params.role;
         },
         methods: {
             onClickPrice: function (index) {
                 this.filters.user_hourly_rate = index;
             },
             applyFilter: function (arr, key, value) {
-                return value ? arr.filter(item => item[key] === value) : arr;
+                if ((key == "searchReq") && value) {
+                    let matchSearch1 = [];
+                    matchSearch1 = this.specialistList
+                        .filter(item => item.firstname.toLowerCase().includes(this.searchModel.toLowerCase().trim()));
+
+                    let matchSearch2 = [];
+                        matchSearch2 = this.specialistList
+                            .filter(item => item.role.toLowerCase().includes(this.searchModel.toLowerCase().trim()));
+
+                    let matchSearch3 = [];
+                    matchSearch3 = this.specialistList
+                    .filter(
+                        item => {
+                            let matchSearchIn = item.skills.filter(
+                                itemIn => 
+                                    itemIn.name.toLowerCase().includes(this.searchModel.toLowerCase().trim())
+                            )
+                            if (matchSearchIn.length) {
+                                return matchSearchIn;
+                            }  
+                            
+                        }
+                    );
+
+                    var matchSearch = matchSearch1.concat(matchSearch2, matchSearch3);
+                    if (!matchSearch.length)
+                        this.notFound = true;
+                    else 
+                        this.notFound = false;
+                        
+                    return matchSearch.length ? matchSearch : [] ;
+                } else {
+                    return value ? arr.filter(item => item[key] === value) : arr;
+                }   
+                
             },
+            onToFilters (data) {
+                this.filters.role = data.role;
+            },
+            onSearchChange () {
+                this.filters.searchReq = this.searchModel;
+            }
         },
+       
         computed: {
             ...mapGetters({
                 specialistList: 'specialistList/getAllUsers',
@@ -142,6 +253,8 @@
                 regionsList:    'other_request/getRegionsListWithStore',
                 cities:         'other_request/getCitiesWithStore',
                 // citiesList:     'other_request/getCitiesListListWithStore',
+                cells: 'other_request/getCategoriesListListWithStore',
+                roleLinks: 'other_request/getCategoriesLinksWithStore'
             }),
             citiesList:{
                 get() {
@@ -152,9 +265,15 @@
                 },
             },
             filteredSpecialistList() {
-                this.$router.push({ path: 'huurEenSpecialist', query: {
-                  ...this.filters
-                }});
+                // console.log(this.$route.params.role);
+                let roleLink = this.roleLinks.filter(item => item.link === this.$route.params.role); 
+                let roleLinkActive = roleLink[0] ? roleLink[0].name : "";
+                this.filters.role = roleLinkActive; //this.filters.role ? this.filters.role : roleLinkActive;//this.$route.params.role;
+                let priceId = this.filters.user_hourly_rate 
+                    ? this.filters.user_hourly_rate.val
+                    : ""; 
+
+                
 
                 let result = this.specialistList;
 
@@ -167,22 +286,65 @@
                     : this.filters.user_city;
 
 
-                regionId ? this.$store.dispatch('other_request/getCityWithServer', regionId) : this.citiesList = [];
 
-                let filtersCopy = {...this.filters, user_region: regionId, user_city: cityId};
+                regionId ? this.$store.dispatch('other_request/getCityWithServer', regionId) : this.citiesList = [];
+                
+                
+                // let filtersCopy = {};
+                if (this.filters.searchReq) {
+                    Object.keys(this.filters).forEach(key => {
+                        if (key !== "searchReq")
+                            this.filters[key] = '';
+                    });
+
+                    priceId = '';
+                    regionId = '';
+                    cityId = '';
+                    filtersCopy = {user_hourly_rate: "", role: "", user_region: "", user_city: "", searchReq: this.filters.searchReq};
+                } 
+
+                let filtersCopy = {user_hourly_rate: priceId, role: this.filters.role, user_place_to_work: this.filters.user_place_to_work, user_region: regionId, user_city: cityId, searchReq: this.filters.searchReq};
+                
+                if (priceId)
+                    this.filtersNotEmpty.user_hourly_rate = priceId;
+                else 
+                    delete this.filtersNotEmpty.user_hourly_rate;
+
+                Object.keys(filtersCopy).forEach(key => {
+                    if (filtersCopy[key])
+                        this.filtersNotEmpty[key] = filtersCopy[key];
+                    else 
+                       delete this.filtersNotEmpty[key]; 
+                });
+
+                if (this.filters.role && roleLink[0]) {
+                    
+                    /**** dynamic SEO start ****/
+                    this.$route.meta.title = roleLink[0] ? roleLink[0].title : "Freelancers";
+                    let descr = roleLink[0] ? roleLink[0].descr : "Freelancers";
+                    this.$route.meta.metaTags = [
+                        {
+                            name: 'description',
+                            content: descr
+                        }
+                    ]
+                    /**** dynamic SEO end ****/
+                    this.$router.push({ path: `/freelancers/${roleLink[0].link}` , query: {
+                        ...this.filtersNotEmpty
+                        }
+                    });
+                } else 
+                    this.$router.push({ path: `/freelancers`, query: {
+                        ...this.filtersNotEmpty
+                        }
+                    });
 
                 Object.keys(this.filters).forEach(key => {
                     result = this.applyFilter(result, key, filtersCopy[key]);
                 });
-
+                // console.log(result);
                 return result
             }
-        },
-        components: {
-            VueSingleSelect,
-            Anketa,
-            AnketaDisabled,
-            AnketaInConversation,
         },
     }
 </script>
@@ -194,6 +356,68 @@
 </style>
 
 <style scoped lang="scss">
+    input {
+        font-family: GolanoRegular;
+    }
+    .search-block {
+        ::placeholder {
+            color: #969696;
+            opacity: 1; /* Firefox */
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #969696;
+        }
+
+        ::-ms-input-placeholder { /* Microsoft Edge */
+            color: #969696;
+        }
+        .input-block {
+            max-width: calc(100% - 104px);
+            height: 48px;
+        }
+        .form-control-lg {
+            border: 1px solid #cacaca;
+            border-radius: 0;
+            vertical-align: middle;
+            padding-left: 2.8rem;
+            padding-top: 0.5rem;
+            padding-bottom: 6px;
+            font-size: 1.1rem;
+            height: 48px;
+            color: #495057;
+        }
+        .btn-info {
+            color: #fff;
+            background-color:  #2ad0e1;
+            border-color:  #2ad0e1;
+            border-radius: 0;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            width: 104px;
+            height: 48px;
+            &:hover {
+                color: #2ad0e1;
+                background: #fff;
+            }
+        }
+        .icon-input {
+            position: absolute;
+            font-size: 1.1rem;
+            color: var(--gray);
+            left: 1rem;
+            top: 1.05rem;
+        }
+    }
+
+    .cellMargin{
+      margin-top: 4%;
+      margin-left: 2.5%;
+      margin-right: 2.5%;
+      width: 97.5%;
+      overflow-x: auto;
+    }
+    
     .disabled {
         pointer-events:none;
         color: #bfcbd9;
@@ -245,6 +469,10 @@
         font-size: 25px;
         font-weight: 400;
         line-height: 30.54px;
+        &.preCellMargin {
+            font-size: 20px;
+            margin-left: 2.5%;
+        }
     }
 
     .price-items {
@@ -379,6 +607,9 @@
     }
 
     @media screen and (max-width: 425px) {
+        .cellMargin{
+            width: 95%;
+        }
         .filters {
             margin-left: 0;
             padding: 3%;

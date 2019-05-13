@@ -14,7 +14,7 @@
             </div>
 
             <div class="name-last">
-              <p><span>€ {{selectedSpecialist.user_hourly_rate}} ,- </span> per uur</p>
+              <p><span>€ {{selectedSpecialist.wage}} ,- </span> per uur</p>
             </div>
           </div>
           <div class="specialty">
@@ -312,7 +312,7 @@
   }
   @media screen  and (max-width: 530px){
     .name-last {
-      display: none;
+      // display: none;
     }
     .name-first {
       width: 100%;

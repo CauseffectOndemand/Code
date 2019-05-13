@@ -2,14 +2,22 @@
   <div class="wrapper">
     <div class="main">
 
-      <div class="header">
+      <div class="header pb-3">
         <img v-lazy="getBaseURL() + user_avatar_url" alt="first" class="avatar">
         <h3>{{name || '...'}}</h3>
-        <p>{{role || '...'}}</p>
+        <p class="mb-1">{{role || '...'}}</p>
+        <small class="font-weight-bold mb-2 text-muted">{{years || '...'}} jaar ervaring</small>
+        <StarComponent :stars_count="Number(stars)"></StarComponent>
       </div>
 
       <div class="body">
-        <StarComponent :stars_count="Number(stars)"></StarComponent>
+        <p>
+          <span class="font-weight-bold text-blue">
+            {{rate || '...' | currency}}
+          </span>
+           per uur
+        </p>
+        
 
         <p v-if="type==='text'">
           {{ textBody || '...' }} <span>{{ date || '...' }}</span>
@@ -17,20 +25,20 @@
       </div>
 
       <div class="footer">
-        <div class="btn-wrap" @click="onOpenPopUp">
+        <!--<div class="btn-wrap" @click="onOpenPopUp">
           <Button
             v-if="type == 'stars' || type == 'text'"
             btnText="VRAAG AAN"
             btnClass="btnOrangeNav"
             stylesImg="width:15px">
           </Button>
-        </div>
+        </div>-->
 
         <div class="btn-wrap" @click="order">
           <Button
             v-if="type == 'stars' || type == 'text'"
             btnText="BEKIJK PROFIEL"
-            btnClass="btnWhite"
+            btnClass="btnOrangeNav"
             stylesImg="width:15px">
           </Button>
         </div>
@@ -56,6 +64,8 @@
       date: String,
       stars: Number,
       specialistId: [String, Number],
+      rate: String,
+      years: String,
     },
     data() {
       return {
@@ -82,6 +92,9 @@
 </script>
 
 <style scoped lang="scss">
+  .text-blue {
+    color: #2ad0e1;
+  }
   .wrapper {
     padding: 0 7.5px;
   }
@@ -115,8 +128,8 @@
     padding: 6% 0px;
 
     p {
-      color: #00c8d7;
-      font-size: 25px;
+      // color: #00c8d7;
+      font-size: 1.25rem;
       font-weight: 400;
       line-height: 30px;
       margin: 0;

@@ -22,7 +22,7 @@
                   <img v-lazy="imageCl" alt="imageCl">
                 </span>
                 <router-link to="/">Home</router-link>
-                <router-link to="/huurEenSpecialist">Huur Een Specialist</router-link>
+                <router-link to="/freelancers">Huur Een Specialist</router-link>
                 <router-link to="/onsVerhaal">Ons verhaal</router-link>
                 <!--<router-link to="/onsWerk">Ons werk</router-link>-->
                 <router-link to="/contact">Contact</router-link>
@@ -33,7 +33,7 @@
       </div>
       <div class="collapse navbar-collapse navItem" id="navbarSupportedContent">
           <div class="itemMenuDark">
-              <router-link to="/huurEenSpecialist">
+              <router-link to="/freelancers">
                   <Button btnText="HUUR EEN SPECIALIST" btnClass="btnOrangeNav" arrow="short">
                   </Button>
               </router-link>

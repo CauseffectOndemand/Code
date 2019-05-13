@@ -35,7 +35,7 @@
                 </div>
               <p :class="[clicked2?'clicked-item':'no-clicked-item']">De opdrachtgever vraagt een specialist aan.
                   Wij plaatsen de specialist in house bij de opdrachtgever. De specialist voert jouw opdracht uit.
-                  Wij factureren de jou, de opdrachtgever. Simpeler kan niet.</p>
+                  Wij factureren jou, de opdrachtgever. Simpeler kan niet.</p>
                 <div @click="onClick('clicked3')" class="qItem">
                     <img v-lazy="src2" alt="plus" class="backgroundPLus white">
                   <img v-lazy="src3" alt="plus"  class="backgroundPLus color">
